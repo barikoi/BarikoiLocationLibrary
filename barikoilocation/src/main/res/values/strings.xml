@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BarikoiLocation</string>
+
+    <string name="access_token" translatable="false">pk.eyJ1IjoidGF1ZmlxdXIiLCJhIjoiY2psYnY3YTgwNGppdTNscXA0ZDFlMDgyYSJ9.353rlwW3mCw7N2KFSfObSQ</string>
+    <string name="could_not_connect">Could not connect</string>
+    <string name="prob_change_server">Problem or change in server, please wait and try again</string>
+    <string name="unknown_error">Unknown Error Occured</string>
+    <string name="pickup_address" translatable="false">House 1, Road 1...</string>
+
+</resources>

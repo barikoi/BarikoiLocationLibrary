@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorTransparent">#00ffffff</color>
+    <color name="materialcolorgrey100">#cfd8dc</color>
+    <color name="colorGray">#49674e</color>
+    <color name="colorLightGray">#a6abae</color>
+</resources>

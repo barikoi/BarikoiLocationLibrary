@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SearchAutoComplete.SearchAutoCompleteActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/barikoiEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableRight="@drawable/clearitems"
+                android:drawablePadding="5dp"
+                android:ellipsize="end"
+                android:focusable="true"
+                android:gravity="center|fill"
+                android:hint="@string/pickup_address"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:singleLine="true" />
+
+            <ProgressBar
+                android:id="@+id/progressBarSearchPlace"
+                style="?android:attr/progressBarStyleInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_alignEnd="@+id/barikoiEditText"
+                android:layout_alignRight="@+id/barikoiEditText"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:foregroundGravity="center_vertical" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutAdapter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutListEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                android:src="@drawable/noresult" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutNoNetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="32dp"
+                app:srcCompat="@drawable/nonetwork" />
+
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/could_not_connect"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <barikoi.barikoilocation.SearchAutoComplete.RecyclerViewEmptySupport
+            android:id="@+id/searchedplacelist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorTransparent"
+            android:overScrollMode="never"
+            android:padding="8dp"
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:listItem="@layout/nearby_place_item" />
+    </LinearLayout>
+
+</LinearLayout>
+
