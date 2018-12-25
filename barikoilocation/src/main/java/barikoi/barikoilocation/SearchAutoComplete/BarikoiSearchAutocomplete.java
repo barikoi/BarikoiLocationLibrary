@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 public class BarikoiSearchAutocomplete extends EditText{
 
+
     public BarikoiSearchAutocomplete(Context context) {
         super(context);
     }
@@ -20,7 +21,6 @@ public class BarikoiSearchAutocomplete extends EditText{
     public BarikoiSearchAutocomplete(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
 
 
     @Override

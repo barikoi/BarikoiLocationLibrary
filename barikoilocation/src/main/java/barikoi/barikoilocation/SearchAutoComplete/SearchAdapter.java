@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                opsl.onPlaceItemSelected( holder.mItem,position);
+                opsl.onPlaceSelected( holder.mItem,position);
             }
         });
 
@@ -152,7 +151,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public interface OnPlaceItemSelectListener{
 
-        void onPlaceItemSelected(Place mItem, int position);
+        void onPlaceSelected(Place mItem, int position);
     }
 }
 

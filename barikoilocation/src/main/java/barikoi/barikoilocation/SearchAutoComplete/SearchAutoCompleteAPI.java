@@ -38,7 +38,6 @@ public class SearchAutoCompleteAPI {
      *  requests the server to get info about the current position
      */
     public void generatelist(final String nameOrCode) {
-
         queue.cancelAll("search");
         if (nameOrCode.length() > 0) {
             StringRequest request = new StringRequest(Request.Method.GET,
@@ -48,34 +47,27 @@ public class SearchAutoCompleteAPI {
                             JSONObject data = new JSONObject(response);
                             JSONArray placearray = data.getJSONArray("places");
 
-                            Bundle b = new Bundle();
-                            b.putString("query", nameOrCode);
-                            b.putInt("result_numbers", placearray.length());
                             if (placearray.length() == 0) {
-                                //Toast.makeText(this,"google", Toast.LENGTH_SHORT).show();
-                                //getPlaceFromAutocomplete(nameOrCode);
+                                this.searchAutoCompleteListener.OnFailure("Place Not Found!");
                             } else {
                                 ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
-                                this.searchAutoCompleteListener.OnPlaceListRecieved(searchPlaces);
+                                this.searchAutoCompleteListener.OnPlaceListReceived(searchPlaces);
                             }
 
                         } catch (JSONException e) {
                             try{
                                 JSONObject data = new JSONObject(response);
-                                //Toast.makeText(SearchPlaceActivity.this,data.getJSONObject("places").getString("Message"), Toast.LENGTH_SHORT).show();
                             }
                             catch (JSONException ex){
                                 //Toast.makeText(this,"problem formatting data", Toast.LENGTH_SHORT).show();
+                                this.searchAutoCompleteListener.OnFailure(ex.toString());
                                 ex.printStackTrace();
                             }
-
                         }
                     },
-                    error -> {
-                        JsonUtils.logResponse(error);
-                        Log.d("search params",nameOrCode);
-
-                    }) {
+                    error ->{
+                        this.searchAutoCompleteListener.OnFailure(error.toString());
+                    }){
             };
             request.setTag("search");
             queue.add(request);

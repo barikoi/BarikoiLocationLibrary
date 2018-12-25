@@ -6,14 +6,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import barikoi.barikoilocation.ReverseGeoAPI;
-import barikoi.barikoilocation.ReverseGeoAPIListener;
+import barikoi.barikoilocation.BarikoiAPI;
+import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
+import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.Place;
-import barikoi.barikoilocation.SearchAutoComplete.BarikoiSearchAutocomplete;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteAPI;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BarikoiAPI.getINSTANCE(this,"MTExMTpKQkZZMzNIQk45");
         lat=findViewById(R.id.Lat);
         lon=findViewById(R.id.Lon);
         submit=findViewById(R.id.submit);
@@ -47,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
         });
         SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
             @Override
-            public void OnPlaceListRecieved(ArrayList<Place> places) {
+            public void OnPlaceListReceived(ArrayList<Place> places) {
+                //Toast.makeText(MainActivity.this, places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void OnFailure(String message) {
 
             }
         });

@@ -1,4 +1,4 @@
-package barikoi.barikoilocation;
+package barikoi.barikoilocation.ReverseGeo;
 
 
 import android.app.Activity;
@@ -17,6 +17,11 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import barikoi.barikoilocation.Api;
+import barikoi.barikoilocation.JsonUtils;
+import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.RequestQueueSingleton;
 
 /**
  * Handles the Location Requests and Response from server

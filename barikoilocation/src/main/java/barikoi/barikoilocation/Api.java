@@ -14,7 +14,9 @@ import static android.content.res.Resources.getSystem;
 public class Api {
 
     public static final String url_base="https://barikoi.xyz/v1/";
-    public static final String TOKEN="MTI6SFpDRkoyN0NFOA==";
-    public static final String ReverseString=url_base+"api/search/reverse/geocode/"+TOKEN+"/place";
-    public static final String AutoCompleteString=url_base+"api/search/autocomplete/"+TOKEN+"/place";
+
+    public static final String ReverseString=url_base+"api/search/reverse/geocode/"+BarikoiAPI.getAccessToken()+"/place";
+    public static final String AutoCompleteString=url_base+"api/search/autocomplete/"+BarikoiAPI.getAccessToken()+"/place";
+    public static final String GeoCodeString=url_base+"api/search/geocode/"+BarikoiAPI.getAccessToken()+"/place";
+
 }

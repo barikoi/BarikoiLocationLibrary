@@ -54,7 +54,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     EditText editText;
     ProgressBar progressBar;
     private TextView addplace;
-
+    SearchAutoCompleteAPI searchAutoCompleteAPI;
     //PlaceTask placeTask;
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -99,8 +99,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                     items.clear();
                     placeAdapter.notifyDataSetChanged();
                     queue.cancelAll("search");
-
-                    generatelist(charSequence.toString());
+                    searchAutoCompleteAPI.generatelist(charSequence.toString());
                     editText.requestFocus();
                 }
                 else {
@@ -126,30 +125,42 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         queue= RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
         editText=findViewById(R.id.barikoiEditText);
         items=new ArrayList<Place>();
-        //loading= findViewById(R.id.loading);
         listView= findViewById(R.id.searchedplacelist);
         View emptylist=findViewById(R.id.LinearLayoutListEmpty);
         View nonetList=findViewById(R.id.LinearLayoutNoNetContainer);
         listView.setNonetview(nonetList);
         listView.setEmptyView(emptylist);
-        // recentSearchlistView= findViewById(R.id.recentsearchedplacelist);
         placeAdapter=new SearchAdapter(items, new SearchAdapter.OnPlaceItemSelectListener() {
             @Override
-            public void onPlaceItemSelected(Place mItem, int position) {
+            public void onPlaceSelected(Place mItem, int position) {
 
             }
         });
-        //recentPlaceAdapter=new SearchAdapter(items, this );
         listView.setAdapter(placeAdapter);
-        //recentSearchlistView.setAdapter(recentPlaceAdapter);
-
-
         editText.requestFocus();
+        searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
+            @Override
+            public void OnPlaceListReceived(ArrayList<Place> places) {
+                if (places.size() == 0) {
+                    listView.emptyshow(true);
+                    //Toast.makeText(this,"google", Toast.LENGTH_SHORT).show();
+                } else {
+                    items.addAll(places);
+                    placeAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void OnFailure(String message){
+                Log.d("BarikoiError",message);
+            }
+        });
+
     }
     /**
      * @param nameOrCode is the place searching for in the app
      *  requests the server to get info about the current position
-     */
+     *//*
     public void generatelist(final String nameOrCode) {
         progressBar.setVisibility(View.VISIBLE);
         editText.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
@@ -170,6 +181,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                             b.putInt("result_numbers", placearray.length());
                             if (placearray.length() == 0) {
                                 listView.emptyshow(true);
+                                Log.d("","");
                                 //Toast.makeText(this,"google", Toast.LENGTH_SHORT).show();
                             } else {
                                 ArrayList<Place> newplaces = JsonUtils.getPlaces(placearray);
@@ -195,14 +207,9 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         editText.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.clearitems,0);
                         JsonUtils.logResponse(error);
-                        listView.nonetshow(true);
+                        listView.emptyshow(true);
                         //JsonUtils.handleResponse(error, SearchPlaceActivity.this);
-                        Log.d("search params",nameOrCode);
-                        /*Toast toast= Toast.makeText(getApplicationContext(),
-                                "Not Found", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 250);
-                        toast.show();*/
-
+                        Log.d("searchparams",nameOrCode);
                     }) {
 
             };
@@ -211,6 +218,6 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             queue.add(request);
         }
-    }
+    }*/
 
 }

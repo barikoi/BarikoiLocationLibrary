@@ -1,7 +1,8 @@
-package barikoi.barikoilocation;
+package barikoi.barikoilocation.ReverseGeo;
 
 import android.location.Location;
 
+import barikoi.barikoilocation.Place;
 
 
 /**

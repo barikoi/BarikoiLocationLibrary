@@ -140,9 +140,6 @@ public final class JsonUtils {
             Toast.makeText(context,context.getString(R.string.could_not_connect),Toast.LENGTH_LONG).show();
         }
         else if(error instanceof AuthFailureError){
-           /* Intent i=new Intent(context,LoginActivity.class);
-            context.startActivity(i);
-            ((Activity)context).finish();*/
         }
         else if(error instanceof ServerError || error instanceof ParseError){
             Toast.makeText(context,context.getString(R.string.prob_change_server),Toast.LENGTH_LONG).show();
