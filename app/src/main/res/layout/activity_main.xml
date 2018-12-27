@@ -31,8 +31,11 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="18sp" />
-    <barikoi.barikoilocation.SearchAutoComplete.BarikoiSearchAutocomplete
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+   <fragment
+       android:id="@+id/place_autocomplete_fragment"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:name="barikoi.barikoilocation.SearchAutoComplete.BarikoiSearchAutocomplete">
+   </fragment>
 
 </LinearLayout>

@@ -6,21 +6,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 
 import java.util.ArrayList;
 
 import barikoi.barikoilocation.BarikoiAPI;
+import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
+import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.SearchAutoComplete.BarikoiSearchAutocomplete;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteAPI;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BarikoiSearchAutocomplete.GetSelectedPlaceListener {
     EditText lat,lon;
     Button submit;
-    TextView place;
+    TextView tvplace;
     ReverseGeoAPI currentLocation;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
         lat=findViewById(R.id.Lat);
         lon=findViewById(R.id.Lon);
         submit=findViewById(R.id.submit);
-        place=findViewById(R.id.place);
+        tvplace=findViewById(R.id.place);
         currentLocation=new ReverseGeoAPI(this, new ReverseGeoAPIListener() {
             @Override
             public void reversedAddress(Place address) {
-                place.setText(address.getAddress());
+                tvplace.setText(address.getAddress());
             }
         });
 
@@ -45,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 currentLocation.getAddress(latittude,longitude);
             }
         });
-        SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
+       /* SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
             @Override
             public void OnPlaceListReceived(ArrayList<Place> places) {
                 //Toast.makeText(MainActivity.this, places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
@@ -56,6 +65,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        searchAutoCompleteAPI.generatelist("Barikoi");
+        searchAutoCompleteAPI.generatelist("Barikoi");*/
+        /*GeoCodeAPI geoCodeAPI=new GeoCodeAPI(this, new PlaceGeoCodeListener() {
+            @Override
+            public void GeoCodePlace(Place place) {
+                tvplace.setText(place.getAddress());
+            }
+
+            @Override
+            public void OnFailure(String Message) {
+
+            }
+        });*/
+
+    }
+    @Override
+    public void getSelectedPlaceListener(Place place) {
+        Toast.makeText(MainActivity.this, place.getAddress(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getError(String error) {
+        Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
     }
 }

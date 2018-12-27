@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import barikoi.barikoilocation.Place;
 
 public interface SearchAutoCompleteListener {
-    void OnPlaceListReceived(ArrayList<Place> places);
-    void OnFailure(String Message);
+    default void OnPlaceListReceived(ArrayList<Place> places){};
+    default void OnFailure(String Message){};
+    default void OnPlaceSelected(Place place){};
 }

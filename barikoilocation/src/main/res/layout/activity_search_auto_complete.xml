@@ -40,14 +40,26 @@
                 android:layout_height="28dp"
                 android:layout_alignEnd="@+id/barikoiEditText"
                 android:layout_alignRight="@+id/barikoiEditText"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="0dp"
-                android:layout_marginRight="0dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
                 android:foregroundGravity="center_vertical" />
+
         </RelativeLayout>
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="end"
+        android:paddingRight="8dp"
+        android:text="Powered By Barikoi"
+        android:textColor="@color/colorBarikoi"
+        android:textSize="12sp" />
     <LinearLayout
         android:id="@+id/linearLayoutAdapter"
         android:layout_width="match_parent"

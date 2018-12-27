@@ -42,14 +42,10 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private ArrayList<Place> items;
     private RequestQueue queue;
     private RecyclerViewEmptySupport listView;
-    //private RecyclerView recentSearchlistView;
-
-    //private ProgressBar loading;
-    private String token;
+    SearchAutoCompleteListener searchAutoCompleteListener;
 
     public static final int REQUEST_SEARCH_CODE=69;
     private SearchAdapter placeAdapter;
-    //private SearchAdapter recentPlaceAdapter;
     TextView tvRecentSearch;
     EditText editText;
     ProgressBar progressBar;
@@ -65,6 +61,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         // handledearch(getIntent());
         progressBar=findViewById(R.id.progressBarSearchPlace);
         progressBar.setVisibility(View.GONE);
+        searchAutoCompleteListener=new SearchAutoCompleteListener() {};
 
         editText.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -87,15 +84,14 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 listView.emptyshow(false);
                 editText.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                progressBar.setVisibility(View.VISIBLE);
                 if(charSequence.length()>=2){
                     //findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
                     //progressBar.setVisibility(View.VISIBLE);
-
                     items.clear();
                     placeAdapter.notifyDataSetChanged();
                     queue.cancelAll("search");
@@ -133,7 +129,16 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         placeAdapter=new SearchAdapter(items, new SearchAdapter.OnPlaceItemSelectListener() {
             @Override
             public void onPlaceSelected(Place mItem, int position) {
-
+                //Toast.makeText(SearchAutoCompleteActivity.this, mItem.getAddress(), Toast.LENGTH_SHORT).show();\
+                /*searchAutoCompleteListener.OnPlaceSelected(mItem);
+                getSelectedPlaceListener.getSelectedPlaceListener(mItem);*/
+                //getCallingActivity();
+              /*  BarikoiSearchAutocomplete barikoiSearchAutocomplete=new BarikoiSearchAutocomplete(getApplicationContext());
+                barikoiSearchAutocomplete.getPlace(mItem);*/
+                Intent returnIntent = getIntent();
+                returnIntent.putExtra("place_selected",mItem);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
             }
         });
         listView.setAdapter(placeAdapter);
@@ -145,6 +150,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                     listView.emptyshow(true);
                     //Toast.makeText(this,"google", Toast.LENGTH_SHORT).show();
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     items.addAll(places);
                     placeAdapter.notifyDataSetChanged();
                 }
@@ -153,71 +159,12 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             @Override
             public void OnFailure(String message){
                 Log.d("BarikoiError",message);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("error",message);
+                setResult(Activity.RESULT_CANCELED,returnIntent);
+                finish();
             }
         });
 
     }
-    /**
-     * @param nameOrCode is the place searching for in the app
-     *  requests the server to get info about the current position
-     *//*
-    public void generatelist(final String nameOrCode) {
-        progressBar.setVisibility(View.VISIBLE);
-        editText.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-        queue.cancelAll("search");
-        items.clear();
-        if (nameOrCode.length() > 0) {
-            StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.AutoCompleteString+"?q="+nameOrCode,
-                    (String response) -> {
-                        progressBar.setVisibility(View.GONE);
-                        editText.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.clearitems,0);
-                        try {
-                            JSONObject data = new JSONObject(response);
-                            JSONArray placearray = data.getJSONArray("places");
-
-                            Bundle b = new Bundle();
-                            b.putString("query", nameOrCode);
-                            b.putInt("result_numbers", placearray.length());
-                            if (placearray.length() == 0) {
-                                listView.emptyshow(true);
-                                Log.d("","");
-                                //Toast.makeText(this,"google", Toast.LENGTH_SHORT).show();
-                            } else {
-                                ArrayList<Place> newplaces = JsonUtils.getPlaces(placearray);
-                                items.addAll(newplaces);
-                                placeAdapter.notifyDataSetChanged();
-                            }
-
-                        } catch (JSONException e) {
-                            try{
-                                JSONObject data = new JSONObject(response);
-                                listView.emptyshow(true);
-                                //Toast.makeText(SearchPlaceActivity.this,data.getJSONObject("places").getString("Message"), Toast.LENGTH_SHORT).show();
-                            }
-                            catch (JSONException ex){
-                                Toast.makeText(SearchAutoCompleteActivity.this,"problem formatting data", Toast.LENGTH_SHORT).show();
-                                ex.printStackTrace();
-                            }
-
-                        }
-                    },
-                    error -> {
-                        //loading.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.GONE);
-                        editText.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.clearitems,0);
-                        JsonUtils.logResponse(error);
-                        listView.emptyshow(true);
-                        //JsonUtils.handleResponse(error, SearchPlaceActivity.this);
-                        Log.d("searchparams",nameOrCode);
-                    }) {
-
-            };
-            request.setTag("search");
-            //loading.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            queue.add(request);
-        }
-    }*/
-
 }
