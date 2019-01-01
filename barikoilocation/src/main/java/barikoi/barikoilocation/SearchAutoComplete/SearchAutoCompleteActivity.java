@@ -159,10 +159,10 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             @Override
             public void OnFailure(String message){
                 Log.d("BarikoiError",message);
-                Intent returnIntent = new Intent();
+             /*   Intent returnIntent = new Intent();
                 returnIntent.putExtra("error",message);
                 setResult(Activity.RESULT_CANCELED,returnIntent);
-                finish();
+                finish();*/
             }
         });
 

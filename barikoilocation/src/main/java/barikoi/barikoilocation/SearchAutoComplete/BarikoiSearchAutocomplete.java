@@ -17,7 +17,7 @@ import android.widget.EditText;
 import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.R;
 
-public class BarikoiSearchAutocomplete extends Fragment implements SearchAutoCompleteListener{
+public class BarikoiSearchAutocomplete extends Fragment{
     private GetSelectedPlaceListener getSelectedPlaceListener;
     Place place;
     Context context;
@@ -47,19 +47,6 @@ public class BarikoiSearchAutocomplete extends Fragment implements SearchAutoCom
         this.getSelectedPlaceListener =(GetSelectedPlaceListener)context;
     }
 
-    @Override
-    public void OnPlaceSelected(Place place) {
-     /*   Toast.makeText(context, place.getAddress(), Toast.LENGTH_SHORT).show();
-        this.get.getSelectedPlaceListener(place);*/
-    }
-/*
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
-        getActivity().startActivityForResult(intent,1);
-        return false;
-    }*/
-
     public interface GetSelectedPlaceListener{
         void getSelectedPlaceListener(Place place);
         default void getError(String error){};
@@ -73,9 +60,14 @@ public class BarikoiSearchAutocomplete extends Fragment implements SearchAutoCom
                 this.getSelectedPlaceListener.getSelectedPlaceListener(this.place);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                String error=data.getStringExtra("error");
-                Log.d("BarikoiErrorFragment",error);
-                this.getSelectedPlaceListener.getError(error);
+                if(data!=null){
+                    String error=data.getStringExtra("error");
+                    Log.d("BarikoiErrorFragment",error);
+                    this.getSelectedPlaceListener.getError(error);
+                }
+                else{
+                    this.getSelectedPlaceListener.getError("Nothing Selected");
+                }
                 //Write your code if there's no result
             }
         }

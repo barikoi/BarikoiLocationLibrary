@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import barikoi.barikoilocation.BarikoiAPI;
 import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
+import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
+import barikoi.barikoilocation.NearbyPlace.NearbyPlaceListener;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.Place;
@@ -23,20 +25,17 @@ import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteAPI;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 
 public class MainActivity extends AppCompatActivity implements BarikoiSearchAutocomplete.GetSelectedPlaceListener {
-    EditText lat,lon;
     Button submit;
     TextView tvplace;
     ReverseGeoAPI currentLocation;
-
+    NearbyPlaceAPI nearbyPlaceListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BarikoiAPI.getINSTANCE(this,"MTExMTpKQkZZMzNIQk45");
-        lat=findViewById(R.id.Lat);
-        lon=findViewById(R.id.Lon);
+        //BarikoiAPI.getINSTANCE(this,"MTExMTpKQkZZMzNIQk45");
         submit=findViewById(R.id.submit);
         tvplace=findViewById(R.id.place);
         currentLocation=new ReverseGeoAPI(this, new ReverseGeoAPIListener() {
@@ -45,13 +44,25 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
                 tvplace.setText(address.getAddress());
             }
         });
+        nearbyPlaceListener=new NearbyPlaceAPI(this, new NearbyPlaceListener() {
+            @Override
+            public void OnPlaceListReceived(ArrayList<Place> places) {
+                Toast.makeText(MainActivity.this, ""+places.size(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void OnFailure(String Message) {
+
+            }
+        });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double latittude=Double.parseDouble(lat.getText().toString());
-                double longitude=Double.parseDouble(lon.getText().toString());
-                currentLocation.getAddress(latittude,longitude);
+                double latittude=23.83723803415923;
+                double longitude=90.36668110638857;
+               /* currentLocation.getAddress(latittude,longitude);*/
+                nearbyPlaceListener.generateNearbyPlaceList(.5,100,latittude,longitude);
             }
         });
        /* SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {

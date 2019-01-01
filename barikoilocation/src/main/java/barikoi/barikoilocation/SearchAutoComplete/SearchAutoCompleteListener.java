@@ -7,5 +7,4 @@ import barikoi.barikoilocation.Place;
 public interface SearchAutoCompleteListener {
     default void OnPlaceListReceived(ArrayList<Place> places){};
     default void OnFailure(String Message){};
-    default void OnPlaceSelected(Place place){};
 }

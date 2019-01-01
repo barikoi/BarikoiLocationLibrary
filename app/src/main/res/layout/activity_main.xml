@@ -8,17 +8,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/Lat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp" />
-
-    <EditText
-        android:id="@+id/Lon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <Button
         android:id="@+id/submit"
         android:layout_width="match_parent"
