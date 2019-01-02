@@ -29,15 +29,15 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  */
 
 public class ReverseGeoAPI {
-    private ReverseGeoAPIListener listener;
+    private ReverseGeoAPIListener reverseGeoAPIListener;
     Context context;
     private static final String TAG="ReverseGeoAPI";
     private boolean isactive;
 
 
-    public ReverseGeoAPI(Context context, ReverseGeoAPIListener listener){
+    public ReverseGeoAPI(Context context, ReverseGeoAPIListener reverseGeoAPIListener){
         this.context=context;
-        this.listener=listener;
+        this.reverseGeoAPIListener = reverseGeoAPIListener;
         isactive=false;
 
     }
@@ -63,29 +63,24 @@ public class ReverseGeoAPI {
                             if(distance>50){
                                  //getaddressG(lat,lon);
                             }
-                            else*/ if(p!=null && listener!=null ) listener.reversedAddress(p);
+                            else*/ if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
-                            //Toast.makeText(context,context.getString(R.string.sorry_no_place_listed_nearby),Toast.LENGTH_LONG).show();
-
-                            //getaddressG(lat,lon);
+                            reverseGeoAPIListener.onFailure(e.toString());
                         }
                     }
-
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //loading.setVisibility(View.GONE);
                         Log.d("ErrorReverse",""+error.getMessage());
-                        JsonUtils.handleResponse(error,context);
+                        reverseGeoAPIListener.onFailure(JsonUtils.handleResponse(error));
                     }
                 }
         );
         queue.add(request);
     }
-
     public void cancelRevGeo(){
         RequestQueue queue = RequestQueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
         queue.cancelAll("addressreq");

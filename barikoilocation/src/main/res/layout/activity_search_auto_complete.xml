@@ -60,12 +60,13 @@
         android:text="Powered By Barikoi"
         android:textColor="@color/colorBarikoi"
         android:textSize="12sp" />
+
     <LinearLayout
         android:id="@+id/linearLayoutAdapter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="2dp">
 
         <LinearLayout
             android:id="@+id/LinearLayoutListEmpty"
@@ -113,7 +114,7 @@
             android:layout_height="match_parent"
             android:divider="@color/colorTransparent"
             android:overScrollMode="never"
-            android:padding="8dp"
+            android:padding="2dp"
             android:scrollbars="none"
             android:visibility="gone"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"

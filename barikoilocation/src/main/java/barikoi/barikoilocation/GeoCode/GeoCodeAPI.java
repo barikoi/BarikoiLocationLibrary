@@ -53,14 +53,13 @@ public class GeoCodeAPI {
                                 JSONObject data = new JSONObject(response);
                             }
                             catch (JSONException ex){
-                                //Toast.makeText(this,"problem formatting data", Toast.LENGTH_SHORT).show();
                                 this.placeGeoCodeListener.OnFailure(ex.toString());
                                 ex.printStackTrace();
                             }
                         }
                     },
                     error ->{
-                        this.placeGeoCodeListener.OnFailure(error.toString());
+                        this.placeGeoCodeListener.OnFailure(JsonUtils.handleResponse(error));
                     }){
             };
             request.setTag("search");

@@ -133,22 +133,21 @@ public final class JsonUtils {
     /**
      * Handles response from the server
      * @param error
-     * @param context
      */
-    public static void handleResponse(VolleyError error, Context context){
+    public static String  handleResponse(VolleyError error){
         if(error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError){
-            Toast.makeText(context,context.getString(R.string.could_not_connect),Toast.LENGTH_LONG).show();
+           return "Could not connect";
         }
         else if(error instanceof AuthFailureError){
+            return "Authentication Problem";
         }
         else if(error instanceof ServerError || error instanceof ParseError){
-            Toast.makeText(context,context.getString(R.string.prob_change_server),Toast.LENGTH_LONG).show();
+           return "Problem or change in server, please wait and try again";
 
         }
         else{
-            Toast.makeText(context, context.getString(R.string.unknown_error),Toast.LENGTH_LONG).show();
+           return "Unknown Error Occured";
         }
-
     }
 
     public static void logResponse(VolleyError error){

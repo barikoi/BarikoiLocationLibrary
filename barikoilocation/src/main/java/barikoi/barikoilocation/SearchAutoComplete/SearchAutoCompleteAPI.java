@@ -61,12 +61,11 @@ public class SearchAutoCompleteAPI {
                             catch (JSONException ex){
                                 //Toast.makeText(this,"problem formatting data", Toast.LENGTH_SHORT).show();
                                 this.searchAutoCompleteListener.OnFailure(ex.toString());
-                                ex.printStackTrace();
                             }
                         }
                     },
                     error ->{
-                        this.searchAutoCompleteListener.OnFailure(error.toString());
+                        this.searchAutoCompleteListener.OnFailure(JsonUtils.handleResponse(error));
                     }){
             };
             request.setTag("search");

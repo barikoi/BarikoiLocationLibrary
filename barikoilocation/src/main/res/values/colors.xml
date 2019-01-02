@@ -3,6 +3,7 @@
     <color name="colorTransparent">#00ffffff</color>
     <color name="materialcolorgrey100">#cfd8dc</color>
     <color name="colorGray">#49674e</color>
-    <color name="colorLightGray">#a6abae</color>
+    <color name="colorLightGray">#a6aba5</color>
     <color name="colorBarikoi">#2db654</color>
+    <color name="colorTextGray">#606060</color>
 </resources>

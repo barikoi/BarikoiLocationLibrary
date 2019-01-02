@@ -10,7 +10,7 @@ import barikoi.barikoilocation.Place;
  */
 
 public interface ReverseGeoAPIListener {
-
-     void reversedAddress(Place address);
+     default void reversedAddress(Place address){};
+     default void onFailure(String message){};
 
 }

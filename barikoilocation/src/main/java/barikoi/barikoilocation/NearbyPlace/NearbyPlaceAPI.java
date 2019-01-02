@@ -57,6 +57,7 @@ public class NearbyPlaceAPI {
                         }
                     },
                     error ->{
+                        this.nearbyPlaceListener.OnFailure(JsonUtils.handleResponse(error));
                     }){
             };
             request.setTag("search");
