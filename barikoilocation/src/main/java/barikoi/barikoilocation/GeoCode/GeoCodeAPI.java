@@ -17,17 +17,26 @@ import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
 import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.RequestQueueSingleton;
-import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 
+/**
+ * This Class is created to handle all GeoCode related network calls
+ */
 public class GeoCodeAPI {
     private RequestQueue queue;
     PlaceGeoCodeListener placeGeoCodeListener;
+
+    /**
+     * This constructor sets the context of application and a PlaceGeoCodeAPI listener
+     * @param context is the application context
+     * @param placeGeoCodeListener is GeoCode Listener to handle the network response
+     */
     public GeoCodeAPI(Context context, PlaceGeoCodeListener placeGeoCodeListener){
         queue= RequestQueueSingleton.getInstance(context).getRequestQueue();
         this.placeGeoCodeListener=placeGeoCodeListener;
     }
 
     /**
+     * This function makes network call with the api to get the place details
      * @param nameOrCode is the place searching for in the app
      *  requests the server to get info about the current position
      */
@@ -35,7 +44,7 @@ public class GeoCodeAPI {
         queue.cancelAll("search");
         if (nameOrCode.length() > 0) {
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.GeoCodeString+nameOrCode,
+                    Api.geoCodeString +nameOrCode,
                     (String response) -> {
                         try {
                             JSONObject data = new JSONObject(response);

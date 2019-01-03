@@ -2,7 +2,6 @@ package barikoi.barikoilocation.NearbyPlace;
 
 import android.content.Context;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -12,8 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
@@ -25,15 +22,27 @@ public class NearbyPlaceAPI {
     private RequestQueue queue;
     private NearbyPlaceListener nearbyPlaceListener;
 
+    /**
+     * This constructor sets the context of application and a NearbyPlaceAPI listener
+     * @param context is the application context
+     * @param nearbyPlaceListener is Nearby Place Listener to handle the network response
+     */
     public NearbyPlaceAPI(Context context, NearbyPlaceListener nearbyPlaceListener){
         queue= RequestQueueSingleton.getInstance(context).getRequestQueue();
         this.nearbyPlaceListener=nearbyPlaceListener;
     }
+
+    /**
+     * @param distance radius around tha latitude an longitude provided by the user to get the nearby places
+     * @param limit total number of places you want to get
+     * @param latitude of location of which you want to get the nearby places list
+     * @param longitude of location of which you want to get the nearby places list
+     */
     public void generateNearbyPlaceList(Double distance, int limit,Double latitude,Double longitude){
         queue.cancelAll("search");
         if(isValidLatLng(latitude,longitude)){
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.NearbyPlacesString+distance+"/"+limit+"/?latitude="+latitude+"&longitude="+longitude,
+                    Api.nearbyPlacesString +distance+"/"+limit+"/?latitude="+latitude+"&longitude="+longitude,
                     (String response) -> {
                         try {
                             JSONArray placearray = new JSONArray(response);
@@ -67,6 +76,13 @@ public class NearbyPlaceAPI {
             this.nearbyPlaceListener.OnFailure("Latitude and Longitude Invalid");
         }
     }
+
+    /**
+     * Checks if the given latitude and longitude is valid or not
+     * @param lat of location of which you want to get the nearby places
+     * @param lng of location of which you want to get the nearby places
+     * @return true or false if the latitude and longitude is right or wrong
+     */
     public boolean isValidLatLng(double lat, double lng){
         if(lat < -90 || lat > 90)
         {

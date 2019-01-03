@@ -21,11 +21,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
- * This class is used to handle all the JSON Data
- * Created by Sakib on 1/3/2018.
+ * This class is used to handle all the JSON Data received from server API
  */
 
 public final class JsonUtils {
+
+    /**
+     * This checks the json object for place attributes. If the object has the attribute then, this function sets it
+     * otherwise sets the attribute as empty string
+     * @param placearray is a JSONArray from server
+     * @return a arraylist of places
+     */
     public static ArrayList<Place> getPlaces(JSONArray placearray){
         ArrayList<Place> newplaces=new ArrayList<Place>();
         try {
@@ -80,7 +86,7 @@ public final class JsonUtils {
     /**
      * Gets a place from the server
      * @param jsonObject takes a json object and structures the data and return a place
-     * @return
+     * @return a structured place
      */
     public static Place getPlace(JSONObject jsonObject){
         try{
@@ -131,8 +137,9 @@ public final class JsonUtils {
     }
 
     /**
-     * Handles response from the server
-     * @param error
+     * Handles error response from the server
+     * @param error is a VolleyError occurs  mostly in network responses
+     *  return a string about the error
      */
     public static String  handleResponse(VolleyError error){
         if(error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError){
@@ -153,7 +160,6 @@ public final class JsonUtils {
     public static void logResponse(VolleyError error){
         String body = "";
         //get status code here
-
         //get response body and parse with appropriate encoding
         if(error.networkResponse!=null) {
             try {
@@ -164,52 +170,4 @@ public final class JsonUtils {
             }
         }
     }
-    /*public static ArrayList<Road> getRoad(String response){
-        ArrayList<Road> roads=new ArrayList<>();
-        try{
-            JSONArray roadArray=new JSONArray(response);
-            for(int i=0;i<roadArray.length();i++){
-                JSONObject road=roadArray.getJSONObject(i);
-                String id=road.getString("id");
-                String name_num=road.getString("road_name_number");
-                String area_id=road.getString("area_id");
-                String subarea_id=road.getString("subarea_id");
-                String condition= road.getString("road_condition");
-                int num_lanes= Integer.parseInt(road.getString("number_of_lanes"));
-                String geojsonstring=road.getString("ST_AsGeoJSON(road_geometry)");
-                ArrayList<LatLng> cordinates=new ArrayList<>();
-                JSONObject geojson=new JSONObject(geojsonstring);
-                JSONArray coordinates=geojson.getJSONArray("coordinates");
-
-                for (int j= 0; j<coordinates.length();j++){
-                    JSONArray coordinate=coordinates.getJSONArray(j);
-                    Double lat=Double.parseDouble(coordinate.getString(1));
-                    Double lon=Double.parseDouble(coordinate.getString(0));
-                    cordinates.add(new LatLng(lat,lon));
-                }
-                roads.add(new Road(id,name_num,area_id,subarea_id,condition,num_lanes,cordinates));
-
-            }
-        }catch (JSONException e){
-            Log.e("jsonparseerror",e.getMessage());
-        }
-        return roads;
-    }*/
-    /*public static PolylineOptions getPoly(Road road){
-        ArrayList<LatLng> pointlist=road.getCoordinates();
-
-        PolylineOptions polygonOptions = new PolylineOptions();
-
-        for (LatLng point : pointlist) {
-            polygonOptions.add(point);
-        }
-        if(road.getRoadCondition().contains("Good"))
-            polygonOptions.color(Color.parseColor("#55AA55"));
-        else if(road.getRoadCondition().contains("Bad"))
-            polygonOptions.color(Color.parseColor("#D4A76A"));
-        else polygonOptions.color(Color.parseColor("#D46A6A"));
-        polygonOptions.width(road.getNum_of_lanes()*2);
-
-        return polygonOptions;
-    }*/
 }

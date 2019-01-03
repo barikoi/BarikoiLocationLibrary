@@ -8,26 +8,6 @@ import android.view.View;
 public class RecyclerViewEmptySupport extends RecyclerView {
     private View emptyView,nonetview;
 
-    /*private AdapterDataObserver emptyObserver = new AdapterDataObserver() {
-
-
-        @Override
-        public void onChanged() {
-            Adapter<?> adapter =  getAdapter();
-            if(adapter != null && emptyView != null &&query!=null) {
-                if(adapter.getItemCount() == 0 && query.getText().toString().length()>2) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    RecyclerViewEmptySupport.this.setVisibility(View.GONE);
-                }
-                else {
-                    emptyView.setVisibility(View.GONE);
-                    RecyclerViewEmptySupport.this.setVisibility(View.VISIBLE);
-                }
-            }
-
-        }
-    };*/
-
     public void emptyshow(boolean empty){
         if(empty) {
             if(emptyView!=null){

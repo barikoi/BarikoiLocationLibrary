@@ -5,7 +5,6 @@ import java.io.Serializable;
 /**
  * This class contains the info of a place including code, city, area
  * We use this Class all over the project to set and get a place
- * Created by Sakib on 04-Jan-17.
  */
 public class Place implements Serializable {
     private String address, lon,lat,code,city,area,postalcode, type,subType,imglink,route,ward,zone,phoneNumber;
@@ -13,24 +12,6 @@ public class Place implements Serializable {
 
     public Place(){}
     public Place(String address, String lon, String lat, String code, String city, String area, String postalcode, String type, String subType, String phoneNumber){
-        this.address=address;
-        this.lat=lat;
-        this.lon=lon;
-        this.code=code;
-        this.city=city;
-        this.area=area;
-        this.postalcode=postalcode;
-        this.type=type;
-        this.subType=subType;
-        this.distance=-1;
-        this.imglink="";
-        this.route="";
-        this.ward="";
-        this.zone="";
-        this.phoneNumber=phoneNumber;
-
-    }
-    public Place(String address, String lon, String lat, String code, String city, String area, String postalcode, String type, String subType ){
         this.address=address;
         this.lat=lat;
         this.lon=lon;

@@ -1,12 +1,7 @@
 package barikoi.barikoilocation.SearchAutoComplete;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -16,32 +11,38 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
 import barikoi.barikoilocation.Place;
-import barikoi.barikoilocation.R;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
+/**
+ * This is the API class of SearchAutoComplete
+ * if anyone not willing to use the SearchAutoComplete Activity, they can use this class to hit the autocomplete server and the get place list
+ */
 public class SearchAutoCompleteAPI {
     private RequestQueue queue;
     SearchAutoCompleteListener searchAutoCompleteListener;
 
+    /**
+     * This constructor sets the context of application and a SearchAutoComplete listener
+     * @param context is the application context
+     * @param searchAutoCompleteListener is SearchAutoComplete Place Listener to handle the network response
+     */
     public SearchAutoCompleteAPI(Context context,SearchAutoCompleteListener searchAutoCompleteListener){
         queue= RequestQueueSingleton.getInstance(context).getRequestQueue();
         this.searchAutoCompleteListener=searchAutoCompleteListener;
     }
     /**
      * @param nameOrCode is the place searching for in the app
-     *  requests the server to get info about the current position
+     *  requests the server to get info about the given place name
      */
     public void generatelist(final String nameOrCode) {
         queue.cancelAll("search");
         if (nameOrCode.length() > 0) {
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.AutoCompleteString+"?q="+nameOrCode,
+                    Api.autoCompleteString +"?q="+nameOrCode,
                     (String response) -> {
                         try {
                             JSONObject data = new JSONObject(response);

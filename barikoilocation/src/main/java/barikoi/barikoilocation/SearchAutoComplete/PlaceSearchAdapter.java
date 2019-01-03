@@ -13,14 +13,17 @@ import java.util.ArrayList;
 import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.R;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> implements Filterable {
+/**
+ * This class is used to hold the Place list of search autocomplete results
+ */
+public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<Place> places;
     ///private Context context;
     private OnPlaceItemSelectListener opsl;
     //private ArrayList<Place> placeListFiltered;
 
-    public SearchAdapter(ArrayList<Place> places, OnPlaceItemSelectListener opsl){
+    public PlaceSearchAdapter(ArrayList<Place> places, OnPlaceItemSelectListener opsl){
         this.places=places;
         //this.placeListFiltered=places;
         this.opsl=opsl;
@@ -48,36 +51,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
 
-    }
-
-    public int findposition(Place p){
-        int position=0;
-        for (int i=0; i<getItemCount();i++){
-            if(places.get(i).getCode().equals(p.getCode())){
-                position=i;
-            }
-        }
-        return  position;
-    }
-    public int findposition(String s){
-        int position=0;
-        for (int i=0; i<getItemCount();i++){
-            if(places.get(i).getCode().equals(s)){
-                position=i;
-            }
-        }
-
-        return  position;
-    }
-
-    public int findqueryposition(String query){
-        int position=0;
-        for (int i=0; i<getItemCount();i++){
-            if(places.get(i).getAddress().matches(query)){
-                position=i;
-            }
-        }
-        return  position;
     }
 
     @Override
@@ -120,17 +93,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         };
     }
-
-    public void removeAt(int position) {
-        places.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, places.size());
-    }
-
     public ArrayList<Place> getList() {
         return places;
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 

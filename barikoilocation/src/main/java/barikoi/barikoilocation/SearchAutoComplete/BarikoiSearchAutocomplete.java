@@ -17,10 +17,13 @@ import android.widget.EditText;
 import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.R;
 
+/**
+ * This is the autocomplete search ui for developers
+ * this ui can be used as a view component in any activity
+ */
 public class BarikoiSearchAutocomplete extends Fragment{
     private GetSelectedPlaceListener getSelectedPlaceListener;
     Place place;
-    Context context;
     EditText barikoiEditText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +54,7 @@ public class BarikoiSearchAutocomplete extends Fragment{
         void getSelectedPlaceListener(Place place);
         default void getError(String error){};
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 

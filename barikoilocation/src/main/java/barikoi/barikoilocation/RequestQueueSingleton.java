@@ -11,7 +11,6 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * This class handles all the requests from the server
- * Created by Sakib on 03-Jan-17.
  */
 
 public class RequestQueueSingleton {

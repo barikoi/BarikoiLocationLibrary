@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
         tvplace=findViewById(R.id.place);
         currentLocation=new ReverseGeoAPI(this, new ReverseGeoAPIListener() {
             @Override
-            public void reversedAddress(Place address) {
-                tvplace.setText(address.getAddress());
+            public void reversedAddress(Place place) {
+                tvplace.setText(place.getAddress());
             }
         });
         nearbyPlaceListener=new NearbyPlaceAPI(this, new NearbyPlaceListener() {
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
             }
 
             @Override
-            public void OnFailure(String Message) {
+            public void OnFailure(String message) {
 
             }
         });

@@ -10,7 +10,16 @@ import barikoi.barikoilocation.Place;
  */
 
 public interface ReverseGeoAPIListener {
-     default void reversedAddress(Place address){};
+     /**
+      * Receives the place from Reverse geo network call
+      * @param place received from the server
+      */
+     default void reversedAddress(Place place){};
+
+    /**
+     * Receives errors occurred after the network call
+     * @param message is the error message
+     */
      default void onFailure(String message){};
 
 }

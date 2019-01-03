@@ -24,8 +24,7 @@ import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 /**
- * Handles the Location Requests and Response from server
- * Created by Sakib on 6/25/2017.
+ * Handles the Location Requests and Response from server of Reverse Geo Api
  */
 
 public class ReverseGeoAPI {
@@ -34,19 +33,29 @@ public class ReverseGeoAPI {
     private static final String TAG="ReverseGeoAPI";
     private boolean isactive;
 
-
+    /**
+     * This constructor sets the context of application and a ReverseGeoAPI listener
+     * @param context is the application context
+     * @param reverseGeoAPIListener is Nearby Place Listener to handle the network response
+     */
     public ReverseGeoAPI(Context context, ReverseGeoAPIListener reverseGeoAPIListener){
         this.context=context;
         this.reverseGeoAPIListener = reverseGeoAPIListener;
         isactive=false;
 
     }
+
+    /**
+     * Gets the place details of a given latitude and longitude
+     * @param lat is the user given latitude
+     * @param lon is the user given longitude
+     */
     public void getAddress(final double lat, final double lon){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         //final String token = prefs.getString(Api.TOKEN, "");
         RequestQueue queue = RequestQueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
         StringRequest request = new StringRequest(Request.Method.GET,
-                Api.ReverseString+"?latitude="+lat+"&longitude="+lon,
+                Api.reverseString +"?latitude="+lat+"&longitude="+lon,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -81,8 +90,8 @@ public class ReverseGeoAPI {
         );
         queue.add(request);
     }
-    public void cancelRevGeo(){
+   /* public void cancelRevGeo(){
         RequestQueue queue = RequestQueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
         queue.cancelAll("addressreq");
-    }
+    }*/
 }
