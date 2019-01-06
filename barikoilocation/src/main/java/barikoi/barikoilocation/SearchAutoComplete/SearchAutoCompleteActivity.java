@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -116,6 +117,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         });
         listView.setAdapter(placeAdapter);
         editTextSearchAutoComplete.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
             @Override
             public void OnPlaceListReceived(ArrayList<Place> places) {
