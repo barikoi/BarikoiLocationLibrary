@@ -2,6 +2,7 @@ package barikoi.barikoilocation.library;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +28,6 @@ import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 public class MainActivity extends AppCompatActivity implements BarikoiSearchAutocomplete.GetSelectedPlaceListener {
     Button submit;
     TextView tvplace;
-    ReverseGeoAPI currentLocation;
-    NearbyPlaceAPI nearbyPlaceListener;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,16 +35,43 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
         //BarikoiAPI.getINSTANCE(this,"MTExMTpKQkZZMzNIQk45");
         submit=findViewById(R.id.submit);
         tvplace=findViewById(R.id.place);
-        currentLocation=new ReverseGeoAPI(this, new ReverseGeoAPIListener() {
+        ReverseGeoAPI.builder(this)
+                .SetLatLng(23.83723803415923,90.36668110638857)
+                .build()
+                .getAddress(new ReverseGeoAPIListener() {
             @Override
             public void reversedAddress(Place place) {
-                tvplace.setText(place.getAddress());
+                Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
+                Log.d("ReverseGeoPlace",""+place.getAddress());
+            }
+
+            @Override
+            public void onFailure(String message) {
+
             }
         });
-        nearbyPlaceListener=new NearbyPlaceAPI(this, new NearbyPlaceListener() {
+        GeoCodeAPI.builder(this)
+                .nameOrCode("bkoi2017")
+                .build()
+                .generatelist(new PlaceGeoCodeListener() {
+            @Override
+            public void geoCodePlace(Place place) {
+                Log.d("geoCodePlace",""+place.getAddress());
+            }
+
+            @Override
+            public void onFailure(String Message) {
+            }
+        });
+        NearbyPlaceAPI.builder(this)
+                .setDistance(.5)
+                .setLimit(10)
+                .setLatLng(23.83723803415923,90.36668110638857)
+                .build()
+                .generateNearbyPlaceList(new NearbyPlaceListener() {
             @Override
             public void OnPlaceListReceived(ArrayList<Place> places) {
-                Toast.makeText(MainActivity.this, ""+places.size(), Toast.LENGTH_SHORT).show();
+                Log.d("NearbyAPILIST",""+places.size());
             }
 
             @Override
@@ -59,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double latittude=23.83723803415923;
-                double longitude=90.36668110638857;
-               /* currentLocation.getAddress(latittude,longitude);*/
-                nearbyPlaceListener.generateNearbyPlaceList(.5,100,latittude,longitude);
             }
         });
        /* SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
@@ -72,19 +92,19 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
             }
 
             @Override
-            public void OnFailure(String message) {
+            public void onFailure(String message) {
 
             }
         });
         searchAutoCompleteAPI.generatelist("Barikoi");*/
         /*GeoCodeAPI geoCodeAPI=new GeoCodeAPI(this, new PlaceGeoCodeListener() {
             @Override
-            public void GeoCodePlace(Place place) {
+            public void geoCodePlace(Place place) {
                 tvplace.setText(place.getAddress());
             }
 
             @Override
-            public void OnFailure(String Message) {
+            public void onFailure(String Message) {
 
             }
         });*/

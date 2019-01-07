@@ -128,6 +128,7 @@ public final class JsonUtils {
             if(phoneNumber.length()>4){
                 newplace.setPhoneNumber(phoneNumber);
             }
+            Log.d("JsonUtils",""+newplace.getAddress());
             return newplace;
 
         }catch (JSONException e){

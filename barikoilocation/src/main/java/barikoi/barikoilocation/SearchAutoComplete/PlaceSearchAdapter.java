@@ -42,8 +42,6 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
         holder.placeView.setText(holder.mItem.getAddress());
         holder.areatag.setText(holder.mItem.getArea());
-        holder.codeView.setText(holder.mItem.getCode());
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +98,6 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public final View mView;
-        public final TextView codeView;
         public final TextView placeView;
         public final TextView areatag;
         public Place mItem;
@@ -108,7 +105,6 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            codeView =  mView.findViewById(R.id.textViewCode);
             placeView =  mView.findViewById(R.id.textView_placename);
             areatag=  mView.findViewById(R.id.textViewAreaTag);
         }

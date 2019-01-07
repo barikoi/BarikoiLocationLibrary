@@ -28,34 +28,29 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  */
 
 public class ReverseGeoAPI {
-    private ReverseGeoAPIListener reverseGeoAPIListener;
     Context context;
-    private static final String TAG="ReverseGeoAPI";
-    private boolean isactive;
+    Double latitude;
+    Double longitude;
 
     /**
-     * This constructor sets the context of application and a ReverseGeoAPI listener
-     * @param context is the application context
-     * @param reverseGeoAPIListener is Nearby Place Listener to handle the network response
+     * Build a new object with the proper navigation parameters already setup.
+     *
+     * @return a {@link Builder} object for creating this object
+     * @since 0.5.0
      */
-    public ReverseGeoAPI(Context context, ReverseGeoAPIListener reverseGeoAPIListener){
+
+    private ReverseGeoAPI(Context context, Double latitude, Double longitude){
         this.context=context;
-        this.reverseGeoAPIListener = reverseGeoAPIListener;
-        isactive=false;
-
+        this.latitude=latitude;
+        this.longitude=longitude;
     }
-
     /**
      * Gets the place details of a given latitude and longitude
-     * @param lat is the user given latitude
-     * @param lon is the user given longitude
      */
-    public void getAddress(final double lat, final double lon){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        //final String token = prefs.getString(Api.TOKEN, "");
-        RequestQueue queue = RequestQueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
+    public void getAddress(ReverseGeoAPIListener reverseGeoAPIListener){
+        RequestQueue queue = RequestQueueSingleton.getInstance(this.context.getApplicationContext()).getRequestQueue();
         StringRequest request = new StringRequest(Request.Method.GET,
-                Api.reverseString +"?latitude="+lat+"&longitude="+lon,
+                Api.reverseString +"?latitude="+this.latitude+"&longitude="+this.longitude,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -68,11 +63,7 @@ public class ReverseGeoAPI {
                         try {
                             JSONObject place= new JSONObject(response).getJSONArray("Place").getJSONObject(0);
                             Place p=JsonUtils.getPlace(place);
-                            /*float distance=Float.valueOf(p.getDistance());
-                            if(distance>50){
-                                 //getaddressG(lat,lon);
-                            }
-                            else*/ if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
+                            if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
 
                         } catch (JSONException e) {
                             reverseGeoAPIListener.onFailure(e.toString());
@@ -82,16 +73,33 @@ public class ReverseGeoAPI {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //loading.setVisibility(View.GONE);
                         Log.d("ErrorReverse",""+error.getMessage());
                         reverseGeoAPIListener.onFailure(JsonUtils.handleResponse(error));
                     }
                 }
         );
         queue.add(request);
+
     }
-   /* public void cancelRevGeo(){
-        RequestQueue queue = RequestQueueSingleton.getInstance(context.getApplicationContext()).getRequestQueue();
-        queue.cancelAll("addressreq");
-    }*/
+    public static Builder builder(Context context) {
+        return  new Builder(context);
+    }
+
+   public static final class Builder{
+       Context context;
+       Double latitude;
+       Double longitude;
+
+       private Builder(Context context){this.context=context;}
+
+       public Builder SetLatLng(Double latitude, Double longitude){
+           this.latitude=latitude;
+           this.longitude=longitude;
+           return this;
+       }
+       public ReverseGeoAPI build(){
+           ReverseGeoAPI reverseGeoAPI=new ReverseGeoAPI(this.context,this.latitude,this.longitude);
+           return reverseGeoAPI;
+       }
+   }
 }

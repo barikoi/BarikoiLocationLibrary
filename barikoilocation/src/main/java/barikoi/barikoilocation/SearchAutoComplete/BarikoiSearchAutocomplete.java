@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -38,6 +37,7 @@ public class BarikoiSearchAutocomplete extends Fragment{
         barikoiEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                barikoiEditText.setText(getContext().getText(R.string.address));
                 Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
                 startActivityForResult(intent,1);
             }
@@ -61,6 +61,7 @@ public class BarikoiSearchAutocomplete extends Fragment{
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 place= (Place) data.getSerializableExtra("place_selected");
+                barikoiEditText.setText(place.toString());
                 this.getSelectedPlaceListener.getSelectedPlaceListener(this.place);
             }
             if (resultCode == Activity.RESULT_CANCELED) {

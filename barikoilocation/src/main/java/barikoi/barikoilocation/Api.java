@@ -15,7 +15,7 @@ public class Api {
     public static final String url_base="https://barikoi.xyz/v1/";
     public static final String reverseString =url_base+"api/search/reverse/geocode/"+BarikoiAPI.getAccessToken()+"/place";
     public static final String autoCompleteString =url_base+"api/search/autocomplete/"+BarikoiAPI.getAccessToken()+"/place";
-    public static final String geoCodeString =url_base+"api/search/geocode/"+BarikoiAPI.getAccessToken()+"/place";
+    public static final String geoCodeString =url_base+"api/search/geocode/"+BarikoiAPI.getAccessToken()+"/place/";
     public static final String nearbyPlacesString =url_base+"api/search/nearby/"+BarikoiAPI.getAccessToken()+"/";
 
 }
