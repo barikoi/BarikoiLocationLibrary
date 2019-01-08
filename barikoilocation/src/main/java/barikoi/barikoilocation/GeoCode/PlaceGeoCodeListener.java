@@ -10,11 +10,11 @@ public interface PlaceGeoCodeListener {
      * Receives the place from Geocode network call
      * @param place received from the server
      */
-    void geoCodePlace(Place place);
+    void onGeoCodePlace(Place place);
 
     /**
      * Receives errors occurred after the network call
-     * @param Message is the error message
+     * @param message is the error message
      */
-    void onFailure(String Message);
+    void onFailure(String message);
 }

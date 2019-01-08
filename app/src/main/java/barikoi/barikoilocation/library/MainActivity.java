@@ -26,51 +26,47 @@ import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteAPI;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 
 public class MainActivity extends AppCompatActivity implements BarikoiSearchAutocomplete.GetSelectedPlaceListener {
-    Button submit;
-    TextView tvplace;
+    Button geoCode,nearby,reverseGeo;
+    EditText lat,lon,geo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //BarikoiAPI.getINSTANCE(this,"MTExMTpKQkZZMzNIQk45");
-        submit=findViewById(R.id.submit);
-        tvplace=findViewById(R.id.place);
-        ReverseGeoAPI.builder(this)
-                .SetLatLng(23.83723803415923,90.36668110638857)
-                .build()
-                .getAddress(new ReverseGeoAPIListener() {
-            @Override
-            public void reversedAddress(Place place) {
-                Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
-                Log.d("ReverseGeoPlace",""+place.getAddress());
-            }
+        nearby=findViewById(R.id.nearby);
+        reverseGeo=findViewById(R.id.reversegeo);
+        geoCode=findViewById(R.id.geoCode);
+        geo=findViewById(R.id.geoId);
+        lat=findViewById(R.id.lat);
+        lon=findViewById(R.id.lon);
 
-            @Override
-            public void onFailure(String message) {
 
-            }
-        });
-        GeoCodeAPI.builder(this)
-                .nameOrCode("bkoi2017")
-                .build()
-                .generatelist(new PlaceGeoCodeListener() {
+        reverseGeo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void geoCodePlace(Place place) {
-                Log.d("geoCodePlace",""+place.getAddress());
-            }
+            public void onClick(View view) {
+                ReverseGeoAPI.builder(getApplicationContext())
+                        .SetLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
+                        .build()
+                        .getAddress(new ReverseGeoAPIListener() {
+                            @Override
+                            public void reversedAddress(Place place) {
+                                Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
+                                Log.d("ReverseGeoPlace",""+place.getAddress());
+                            }
 
-            @Override
-            public void onFailure(String Message) {
+                            @Override
+                            public void onFailure(String message) {
+
+                            }
+                        });
             }
         });
-
-        submit.setOnClickListener(new View.OnClickListener() {
+        nearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NearbyPlaceAPI.builder(getApplicationContext())
                         .setDistance(.5)
                         .setLimit(10)
-                        .setLatLng(23.83723803415923,90.36668110638857)
+                        .setLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
                         .build()
                         .generateNearbyPlaceList(new NearbyPlaceListener() {
                             @Override
@@ -85,29 +81,28 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
                         });
             }
         });
-       /* SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
-            @Override
-            public void OnPlaceListReceived(ArrayList<Place> places) {
-                //Toast.makeText(MainActivity.this, places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
-            }
+      geoCode.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              GeoCodeAPI.builder(getApplicationContext())
+                      .nameOrCode(geo.getText().toString())
+                      .build()
+                      .generatelist(new PlaceGeoCodeListener() {
+                          @Override
+                          public void onGeoCodePlace(Place place) {
+                              Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
+                              Log.d("onGeoCodePlace",""+place.getAddress());
+                          }
 
-            @Override
-            public void onFailure(String message) {
+                          @Override
+                          public void onFailure(String message) {
+                              Toast.makeText(MainActivity.this, ""+ message, Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        searchAutoCompleteAPI.generatelist("Barikoi");*/
-        /*GeoCodeAPI geoCodeAPI=new GeoCodeAPI(this, new PlaceGeoCodeListener() {
-            @Override
-            public void geoCodePlace(Place place) {
-                tvplace.setText(place.getAddress());
-            }
+                          }
+                      });
 
-            @Override
-            public void onFailure(String Message) {
-
-            }
-        });*/
+          }
+      });
 
     }
     @Override

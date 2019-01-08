@@ -61,13 +61,7 @@ public class SearchAutoCompleteAPI {
                             }
 
                         } catch (JSONException e) {
-                            try{
-                                JSONObject data = new JSONObject(response);
-                            }
-                            catch (JSONException ex){
-                                Log.d(TAG,ex.toString());
-                                searchAutoCompleteListener.OnFailure(ex.toString());
-                            }
+                            searchAutoCompleteListener.OnFailure(JsonUtils.logError(TAG,response));
                         }
                     },
                     error ->{
@@ -79,17 +73,36 @@ public class SearchAutoCompleteAPI {
             queue.add(request);
         }
     }
-
+    /**
+     * This builder is used to create a new request to the Search AutoComplete API
+     * At a bare minimum, your request
+     * must include an application context, a Name or Code of your desired place. All other fields can be left alone
+     * inorder to use the default behaviour of the API.
+     */
     public static final class Builder{
         Context context;
-        String nameOrCode;
+        String nameOrCode="";
 
+        /**
+         * Private constructor for initializing the raw SearchAutoComplete.Builder
+         */
         private Builder(Context context){ this.context=context;}
 
+        /**
+         * The name or code the user want to search with
+         * @param nameOrCode is the input string of place name or code for searching place
+         * @return
+         */
         public Builder nameOrCode(String nameOrCode){
             this.nameOrCode=nameOrCode;
             return this;
         }
+        /**
+         * This uses the provided parameters set using the {@link Builder} and adds the required
+         * settings for search Autocomplete to work correctly.
+         *
+         * @return a new instance of Search Autocomplete
+         */
         public SearchAutoCompleteAPI build(){
             SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this.context,this.nameOrCode);
             return searchAutoCompleteAPI;

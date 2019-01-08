@@ -67,8 +67,7 @@ public class ReverseGeoAPI {
                             if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
 
                         } catch (JSONException e) {
-                            Log.d(TAG,e.toString());
-                            reverseGeoAPIListener.onFailure(e.toString());
+                            reverseGeoAPIListener.onFailure(JsonUtils.logError(TAG,response));
                         }
                     }
                 },
@@ -87,18 +86,40 @@ public class ReverseGeoAPI {
         return  new Builder(context);
     }
 
+    /**
+     * This builder is used to create a new request to the ReverseGeo API
+     * At a bare minimum, your request
+     * must include an application context, a latitude and longitude of the point you are seeking address. All other fields can be left alone
+     * inorder to use the default behaviour of the API.
+     */
    public static final class Builder{
        Context context;
-       Double latitude;
-       Double longitude;
+       Double latitude=0.0;
+       Double longitude=0.0;
 
+        /**
+         * Private constructor for initializing the raw ReverseGeo.Builder
+         */
        private Builder(Context context){this.context=context;}
 
+
+        /**
+         *  This class is to set the latitude and longitude you want to use search for
+         * @param latitude is the latitude of a point
+         * @param longitude is the longitude of a point
+         * @return a builder class
+         */
        public Builder SetLatLng(Double latitude, Double longitude){
            this.latitude=latitude;
            this.longitude=longitude;
            return this;
        }
+        /**
+         * This uses the provided parameters set using the {@link Builder} and adds the required
+         * settings for ReverseGeo to work correctly.
+         *
+         * @return a new instance of ReverseGeo
+         */
        public ReverseGeoAPI build(){
            ReverseGeoAPI reverseGeoAPI=new ReverseGeoAPI(this.context,this.latitude,this.longitude);
            return reverseGeoAPI;

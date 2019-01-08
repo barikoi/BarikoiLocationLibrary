@@ -58,13 +58,7 @@ public class NearbyPlaceAPI {
                             }
 
                         } catch (JSONException e) {
-                            try{
-                                JSONObject data = new JSONObject(response);
-                            }
-                            catch (JSONException ex){
-                                Log.d(TAG,ex.toString());
-                                nearbyPlaceListener.OnFailure(ex.toString());
-                            }
+                            nearbyPlaceListener.OnFailure(JsonUtils.logError(TAG,response));
                         }
                     },
                     error ->{
@@ -100,28 +94,64 @@ public class NearbyPlaceAPI {
         }
         return true;
     }
+    /**
+     * This builder is used to create a new request to the Search Nearby API
+     * At a bare minimum, your request
+     * must include an application context, a latitude and longitude of the point you are seeking address
+     * a distance radius in kilometers in which you want to bound your results
+     * a limit for number of places you want
+     * All other fields can be left alone
+     * inorder to use the default behaviour of the API.
+     */
     public static final class Builder{
         Context context;
-        double distance;
-        int limit;
-        Double latitude;
-        Double longitude;
+        double distance=.5;
+        int limit=10;
+        Double latitude=0.0;
+        Double longitude=0.0;
 
+        /**
+         * Private constructor for initializing the raw NearbyPlace.Builder
+         */
         private Builder(Context context){this.context=context;}
 
+        /**
+         *  This class is to set the latitude and longitude you want to use search for
+         * @param latitude is the latitude of a point
+         * @param longitude is the longitude of a point
+         * @return a builder class
+         */
         public Builder setLatLng(Double latitude, Double longitude){
             this.latitude=latitude;
             this.longitude=longitude;
             return this;
         }
+
+        /**
+         *  This class is to set the distance you want to limit your search to
+         * @param distance
+         * @return
+         */
         public Builder setDistance(double distance){
             this.distance=distance;
             return this;
         }
+
+        /**
+         * This sets the limit of places you want to get
+         * @param limit of the numbers of places you want to get in nearby areas
+         * @return
+         */
         public Builder setLimit(int limit){
             this.limit=limit;
             return this;
         }
+        /**
+         * This uses the provided parameters set using the {@link Builder} and adds the required
+         * settings for nearby search to work correctly.
+         *
+         * @return a new instance of NearbyPlace
+         */
         public NearbyPlaceAPI build(){
             NearbyPlaceAPI nearbyPlaceAPI=new NearbyPlaceAPI(this.context,this.distance,this.limit,this.latitude,this.longitude);
             return nearbyPlaceAPI;

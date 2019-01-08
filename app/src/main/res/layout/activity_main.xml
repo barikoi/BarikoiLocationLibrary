@@ -8,19 +8,42 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/submit"
+    <EditText
+        android:id="@+id/lat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nearby" />
+        android:text="23.83723803415923" />
 
-    <TextView
-        android:id="@+id/place"
+    <EditText
+        android:id="@+id/lon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="18sp" />
-   <fragment
+        android:text="90.36668110638857" />
+
+    <EditText
+        android:id="@+id/geoId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="bkoi2017" />
+
+    <Button
+        android:id="@+id/reversegeo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reversegeo" />
+
+    <Button
+        android:id="@+id/nearby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="nearby" />
+
+    <Button
+        android:id="@+id/geoCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GeoCode" />
+    <fragment
        android:id="@+id/place_autocomplete_fragment"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"

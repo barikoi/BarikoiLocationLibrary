@@ -158,6 +158,26 @@ public final class JsonUtils {
         }
     }
 
+    /**
+     * This method is used to track the errors if theres an JSON exception.
+     * @param TAG is class tag
+     * @param response is the JSON response
+     * @return the error exception message
+     */
+    public static String logError(String TAG, String response){
+        String error="";
+        JSONObject data;
+        try {
+            data = new JSONObject(response);
+            if(data.has("message")){
+                error=data.getString("message");
+                Log.d(TAG,error);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return error;
+    }
     public static void logResponse(VolleyError error){
         String body = "";
         //get status code here

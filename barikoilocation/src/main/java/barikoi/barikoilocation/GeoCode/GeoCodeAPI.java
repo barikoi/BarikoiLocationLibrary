@@ -23,14 +23,14 @@ import barikoi.barikoilocation.RequestQueueSingleton;
 public class GeoCodeAPI {
     private static final String TAG="GeoCodeApi";
     Context context;
-    String nameOrCode;
+    String idOrCode;
 
     /**
      * This constructor sets the context of application and a PlaceGeoCodeAPI listener
      */
-    private GeoCodeAPI(Context context,String nameOrCode){
+    private GeoCodeAPI(Context context,String idOrCode){
         this.context=context;
-        this.nameOrCode=nameOrCode;
+        this.idOrCode = idOrCode;
     }
     public static Builder builder(Context context){
         return new Builder(context);
@@ -42,23 +42,16 @@ public class GeoCodeAPI {
     public void generatelist(PlaceGeoCodeListener placeGeoCodeListener) {
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
-        if (this.nameOrCode.length() > 0) {
+        if (this.idOrCode.length() > 0) {
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.geoCodeString +this.nameOrCode,
+                    Api.geoCodeString +this.idOrCode,
                     (String response) -> {
                         try {
                             JSONObject data = new JSONArray(response).getJSONObject(0);
                                 Place place = JsonUtils.getPlace(data);
-                                placeGeoCodeListener.geoCodePlace(place);
+                                placeGeoCodeListener.onGeoCodePlace(place);
                         } catch (JSONException e) {
-                            try{
-                                JSONObject data = new JSONObject(response);
-                            }
-                            catch (JSONException ex){
-                                Log.d(TAG,ex.toString());
-                                placeGeoCodeListener.onFailure(ex.toString());
-                                ex.printStackTrace();
-                            }
+                            placeGeoCodeListener.onFailure(JsonUtils.logError(TAG,response));
                         }
                     },
                     error ->{
@@ -70,19 +63,39 @@ public class GeoCodeAPI {
             queue.add(request);
         }
     }
-
+    /**
+     * This builder is used to create a new request to the GeoCode API
+     * At a bare minimum, your request
+     * must include an application context, a Name or Code of your desired place. All other fields can be left alone
+     * inorder to use the default behaviour of the API.
+     */
     public static final class Builder{
         Context context;
-        String nameOrCode;
+        String idOrCode="";
 
+        /**
+         * Private constructor for initializing the raw GeoCode.Builder
+         */
         private Builder(Context context){ this.context=context;}
 
-        public Builder nameOrCode(String nameOrCode){
-            this.nameOrCode=nameOrCode;
+        /**
+         * The name or code the user want to search with
+         * @param idOrCode is the input string of place name or code for searching place
+         * @return
+         */
+        public Builder nameOrCode(String idOrCode){
+            this.idOrCode =idOrCode;
             return this;
         }
+
+        /**
+         * This uses the provided parameters set using the {@link Builder} and adds the required
+         * settings for GeoCode to work correctly.
+         *
+         * @return a new instance of GeoCode
+         */
         public GeoCodeAPI build(){
-            GeoCodeAPI geoCodeAPI=new GeoCodeAPI(this.context,this.nameOrCode);
+            GeoCodeAPI geoCodeAPI=new GeoCodeAPI(this.context,this.idOrCode);
             return geoCodeAPI;
         }
     }
