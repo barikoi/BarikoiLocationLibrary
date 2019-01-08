@@ -28,6 +28,7 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  */
 
 public class ReverseGeoAPI {
+    private static final String TAG="ReverseGeoApi";
     Context context;
     Double latitude;
     Double longitude;
@@ -66,6 +67,7 @@ public class ReverseGeoAPI {
                             if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
 
                         } catch (JSONException e) {
+                            Log.d(TAG,e.toString());
                             reverseGeoAPIListener.onFailure(e.toString());
                         }
                     }
@@ -73,7 +75,7 @@ public class ReverseGeoAPI {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("ErrorReverse",""+error.getMessage());
+                        Log.d(TAG,JsonUtils.handleResponse(error));
                         reverseGeoAPIListener.onFailure(JsonUtils.handleResponse(error));
                     }
                 }

@@ -21,6 +21,7 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  * This Class is created to handle all GeoCode related network calls
  */
 public class GeoCodeAPI {
+    private static final String TAG="GeoCodeApi";
     Context context;
     String nameOrCode;
 
@@ -54,12 +55,14 @@ public class GeoCodeAPI {
                                 JSONObject data = new JSONObject(response);
                             }
                             catch (JSONException ex){
+                                Log.d(TAG,ex.toString());
                                 placeGeoCodeListener.onFailure(ex.toString());
                                 ex.printStackTrace();
                             }
                         }
                     },
                     error ->{
+                        Log.d(TAG,JsonUtils.handleResponse(error));
                         placeGeoCodeListener.onFailure(JsonUtils.handleResponse(error));
                     }){
             };

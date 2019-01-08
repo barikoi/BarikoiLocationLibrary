@@ -1,6 +1,7 @@
 package barikoi.barikoilocation.NearbyPlace;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,11 +20,13 @@ import barikoi.barikoilocation.RequestQueueSingleton;
 
 
 public class NearbyPlaceAPI {
+    private static final String TAG="NearbyPlaceApi";
     Context context;
     Double distance;
     int limit;
     Double latitude;
     Double longitude;
+
     /**
      * This constructor sets the context of application and a NearbyPlaceAPI listener
      * @param context is the application context
@@ -47,6 +50,7 @@ public class NearbyPlaceAPI {
                             JSONArray placearray = new JSONArray(response);
 
                             if (placearray.length() == 0) {
+                                Log.d(TAG,"No places Found");
                                 nearbyPlaceListener.OnFailure("No places Found");
                             } else {
                                 ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
@@ -58,13 +62,13 @@ public class NearbyPlaceAPI {
                                 JSONObject data = new JSONObject(response);
                             }
                             catch (JSONException ex){
-                                //Toast.makeText(this,"problem formatting data", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG,ex.toString());
                                 nearbyPlaceListener.OnFailure(ex.toString());
-                                ex.printStackTrace();
                             }
                         }
                     },
                     error ->{
+                        Log.d(TAG,JsonUtils.handleResponse(error));
                         nearbyPlaceListener.OnFailure(JsonUtils.handleResponse(error));
                     }){
             };
@@ -72,6 +76,7 @@ public class NearbyPlaceAPI {
             queue.add(request);
         }
         else{
+            Log.d(TAG,"Latitude and Longitude Invalid");
             nearbyPlaceListener.OnFailure("Latitude and Longitude Invalid");
         }
     }

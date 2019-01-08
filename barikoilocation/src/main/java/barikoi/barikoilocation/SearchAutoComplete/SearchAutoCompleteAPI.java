@@ -1,6 +1,7 @@
 package barikoi.barikoilocation.SearchAutoComplete;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,37 +23,41 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  * if anyone not willing to use the SearchAutoComplete Activity, they can use this class to hit the autocomplete server and the get place list
  */
 public class SearchAutoCompleteAPI {
-    private RequestQueue queue;
-    SearchAutoCompleteListener searchAutoCompleteListener;
-
+    private static final String TAG="SearchAutoCompleteApi";
+    Context context;
+    String nameOrCode;
     /**
      * This constructor sets the context of application and a SearchAutoComplete listener
      * @param context is the application context
-     * @param searchAutoCompleteListener is SearchAutoComplete Place Listener to handle the network response
+
      */
-    public SearchAutoCompleteAPI(Context context,SearchAutoCompleteListener searchAutoCompleteListener){
-        queue= RequestQueueSingleton.getInstance(context).getRequestQueue();
-        this.searchAutoCompleteListener=searchAutoCompleteListener;
+    public SearchAutoCompleteAPI(Context context,String nameOrCode){
+        this.context=context;
+        this.nameOrCode=nameOrCode;
+    }
+    public static Builder builder(Context context){
+        return new Builder(context);
     }
     /**
-     * @param nameOrCode is the place searching for in the app
      *  requests the server to get info about the given place name
      */
-    public void generatelist(final String nameOrCode) {
+    public void generatelist(SearchAutoCompleteListener searchAutoCompleteListener) {
+        RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
-        if (nameOrCode.length() > 0) {
+        if (this.nameOrCode.length() > 0) {
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.autoCompleteString +"?q="+nameOrCode,
+                    Api.autoCompleteString +"?q="+this.nameOrCode,
                     (String response) -> {
                         try {
                             JSONObject data = new JSONObject(response);
                             JSONArray placearray = data.getJSONArray("places");
 
                             if (placearray.length() == 0) {
-                                this.searchAutoCompleteListener.OnFailure("Place Not Found!");
+                                Log.d(TAG,"Place Not Found");
+                                searchAutoCompleteListener.OnFailure("Place Not Found!");
                             } else {
                                 ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
-                                this.searchAutoCompleteListener.OnPlaceListReceived(searchPlaces);
+                                searchAutoCompleteListener.OnPlaceListReceived(searchPlaces);
                             }
 
                         } catch (JSONException e) {
@@ -60,17 +65,34 @@ public class SearchAutoCompleteAPI {
                                 JSONObject data = new JSONObject(response);
                             }
                             catch (JSONException ex){
-                                //Toast.makeText(this,"problem formatting data", Toast.LENGTH_SHORT).show();
-                                this.searchAutoCompleteListener.OnFailure(ex.toString());
+                                Log.d(TAG,ex.toString());
+                                searchAutoCompleteListener.OnFailure(ex.toString());
                             }
                         }
                     },
                     error ->{
-                        this.searchAutoCompleteListener.OnFailure(JsonUtils.handleResponse(error));
+                        Log.d(TAG,JsonUtils.handleResponse(error));
+                        searchAutoCompleteListener.OnFailure(JsonUtils.handleResponse(error));
                     }){
             };
             request.setTag("search");
             queue.add(request);
+        }
+    }
+
+    public static final class Builder{
+        Context context;
+        String nameOrCode;
+
+        private Builder(Context context){ this.context=context;}
+
+        public Builder nameOrCode(String nameOrCode){
+            this.nameOrCode=nameOrCode;
+            return this;
+        }
+        public SearchAutoCompleteAPI build(){
+            SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this.context,this.nameOrCode);
+            return searchAutoCompleteAPI;
         }
     }
 }

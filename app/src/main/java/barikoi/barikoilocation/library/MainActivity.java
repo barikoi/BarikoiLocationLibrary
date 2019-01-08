@@ -63,26 +63,26 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
             public void onFailure(String Message) {
             }
         });
-        NearbyPlaceAPI.builder(this)
-                .setDistance(.5)
-                .setLimit(10)
-                .setLatLng(23.83723803415923,90.36668110638857)
-                .build()
-                .generateNearbyPlaceList(new NearbyPlaceListener() {
-            @Override
-            public void OnPlaceListReceived(ArrayList<Place> places) {
-                Log.d("NearbyAPILIST",""+places.size());
-            }
-
-            @Override
-            public void OnFailure(String message) {
-
-            }
-        });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NearbyPlaceAPI.builder(getApplicationContext())
+                        .setDistance(.5)
+                        .setLimit(10)
+                        .setLatLng(23.83723803415923,90.36668110638857)
+                        .build()
+                        .generateNearbyPlaceList(new NearbyPlaceListener() {
+                            @Override
+                            public void OnPlaceListReceived(ArrayList<Place> places) {
+                                Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
+                                Log.d("NearbyAPILIST",""+places.size());
+                            }
+                            @Override
+                            public void OnFailure(String message) {
+
+                            }
+                        });
             }
         });
        /* SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {

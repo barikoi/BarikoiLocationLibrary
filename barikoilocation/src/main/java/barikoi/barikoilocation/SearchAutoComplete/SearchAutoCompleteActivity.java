@@ -36,7 +36,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private PlaceSearchAdapter placeAdapter;
     EditText editTextSearchAutoComplete;
     ProgressBar progressBar;
-    SearchAutoCompleteAPI searchAutoCompleteAPI;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,6 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         init();
         progressBar=findViewById(R.id.progressBarSearchPlace);
         progressBar.setVisibility(View.GONE);
-        searchAutoCompleteListener=new SearchAutoCompleteListener() {};
-
         editTextSearchAutoComplete.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -77,7 +75,25 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                     items.clear();
                     placeAdapter.notifyDataSetChanged();
                     queue.cancelAll("search");
-                    searchAutoCompleteAPI.generatelist(charSequence.toString());
+                    SearchAutoCompleteAPI.builder(getApplicationContext())
+                           .nameOrCode(charSequence.toString())
+                           .build()
+                           .generatelist(new SearchAutoCompleteListener() {
+                               @Override
+                               public void OnPlaceListReceived(ArrayList<Place> places) {
+                                   if (places.size() == 0) {
+                                       listView.emptyshow(true);
+                                   } else {
+                                       progressBar.setVisibility(View.GONE);
+                                       items.addAll(places);
+                                       placeAdapter.notifyDataSetChanged();
+                                   }
+                               }
+                               @Override
+                               public void OnFailure(String message) {
+                                   Log.d("BarikoiError",message);
+                               }
+                           });
                     editTextSearchAutoComplete.requestFocus();
                 }
                 else {
@@ -118,23 +134,6 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         listView.setAdapter(placeAdapter);
         editTextSearchAutoComplete.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        searchAutoCompleteAPI=new SearchAutoCompleteAPI(this, new SearchAutoCompleteListener() {
-            @Override
-            public void OnPlaceListReceived(ArrayList<Place> places) {
-                if (places.size() == 0) {
-                    listView.emptyshow(true);
-                    //Toast.makeText(this,"google", Toast.LENGTH_SHORT).show();
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    items.addAll(places);
-                    placeAdapter.notifyDataSetChanged();
-                }
-            }
-            @Override
-            public void OnFailure(String message){
-                Log.d("BarikoiError",message);
-            }
-        });
 
     }
 }
