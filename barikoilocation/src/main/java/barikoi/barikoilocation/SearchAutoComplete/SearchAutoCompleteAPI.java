@@ -65,6 +65,7 @@ public class SearchAutoCompleteAPI {
                     },
                     error ->{
                         Log.d(TAG,JsonUtils.handleResponse(error));
+
                         searchAutoCompleteListener.onFailure(JsonUtils.handleResponse(error));
                     }){
             };

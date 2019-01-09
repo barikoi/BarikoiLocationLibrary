@@ -1,7 +1,6 @@
 package barikoi.barikoilocation.SearchAutoComplete;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,8 +19,9 @@ import barikoi.barikoilocation.R;
  * This is the autocomplete search ui for developers
  * this ui can be used as a view component in any activity
  */
-public class BarikoiSearchAutocomplete extends Fragment{
-    private GetSelectedPlaceListener getSelectedPlaceListener;
+public class SearchAutocompleteFragment extends Fragment{
+    private static final String TAG="SearchAutocomplete";
+    private PlaceSelectionListener placeSelectionListener;
     Place place;
     EditText barikoiEditText;
     @Override
@@ -33,6 +33,7 @@ public class BarikoiSearchAutocomplete extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        /*onPlaceSelected =(PlaceSelectionListener)BarikoiAPI.getApplicationContext();*/
         barikoiEditText=view.findViewById(R.id.barikoiEditText);
         barikoiEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,33 +45,49 @@ public class BarikoiSearchAutocomplete extends Fragment{
         });
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.getSelectedPlaceListener =(GetSelectedPlaceListener)context;
+    public void setPlaceSelectionListener(PlaceSelectionListener placeSelectionListener){
+      try{
+          this.placeSelectionListener = placeSelectionListener;
+      }
+      catch (Exception e){}
     }
-
-    public interface GetSelectedPlaceListener{
-        void getSelectedPlaceListener(Place place);
-        default void getError(String error){}
+    public interface PlaceSelectionListener {
+        void onPlaceSelected(Place place);
+        void onFailure(String error);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 place= (Place) data.getSerializableExtra("place_selected");
                 barikoiEditText.setText(place.toString());
-                this.getSelectedPlaceListener.getSelectedPlaceListener(this.place);
+                try {
+                    this.placeSelectionListener.onPlaceSelected(this.place);
+                }
+                catch (NullPointerException e){
+                    Log.d(TAG,"PlaceSelectionListener not Implemented for search auto complete");
+                }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 if(data!=null){
                     String error=data.getStringExtra("error");
-                    Log.d("BarikoiErrorFragment",error);
-                    this.getSelectedPlaceListener.getError(error);
+                    Log.d(TAG,error);
+                    try {
+                        this.placeSelectionListener.onFailure(error);
+                    }
+                    catch (NullPointerException e){
+                        Log.d(TAG,"PlaceSelectionListener not Implemented for search auto complete");
+                    }
                 }
                 else{
-                    this.getSelectedPlaceListener.getError("Nothing Selected");
+                    try {
+                        this.placeSelectionListener.onFailure("Nothing Selected");
+                    }
+                    catch (NullPointerException e){
+                        Log.d(TAG,"PlaceSelectionListener not Implemented for search auto complete");
+                    }
                 }
                 //Write your code if there's no result
             }

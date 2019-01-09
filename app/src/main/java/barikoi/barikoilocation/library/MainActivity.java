@@ -17,11 +17,12 @@ import barikoi.barikoilocation.NearbyPlace.NearbyPlaceListener;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.Place;
-import barikoi.barikoilocation.SearchAutoComplete.BarikoiSearchAutocomplete;
+import barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment;
 
-public class MainActivity extends AppCompatActivity implements BarikoiSearchAutocomplete.GetSelectedPlaceListener {
+public class MainActivity extends AppCompatActivity  {
     Button geoCode,nearby,reverseGeo;
     EditText lat,lon,geo;
+    SearchAutocompleteFragment searchAutocompleteFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +33,18 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
         geo=findViewById(R.id.geoId);
         lat=findViewById(R.id.lat);
         lon=findViewById(R.id.lon);
+        searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Log.d("MainActivity",""+place.getAddress());
+            }
 
+            @Override
+            public void onFailure(String error) {
 
+            }
+        });
         reverseGeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,13 +110,13 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
       });
 
     }
-    @Override
-    public void getSelectedPlaceListener(Place place) {
+   /* @Override
+    public void onPlaceSelected(Place place) {
         Toast.makeText(MainActivity.this, place.getAddress(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void getError(String error) {
+    public void onFailure(String error) {
         Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 }
