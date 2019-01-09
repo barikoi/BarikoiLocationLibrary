@@ -62,6 +62,10 @@ public class GeoCodeAPI {
             request.setTag("search");
             queue.add(request);
         }
+        else{
+            Log.d(TAG,"Geo Code is Null");
+            placeGeoCodeListener.onFailure("Geo Code is Null");
+        }
     }
     /**
      * This builder is used to create a new request to the GeoCode API
@@ -83,7 +87,7 @@ public class GeoCodeAPI {
          * @param idOrCode is the input string of place name or code for searching place
          * @return
          */
-        public Builder nameOrCode(String idOrCode){
+        public Builder idOrCode(String idOrCode){
             this.idOrCode =idOrCode;
             return this;
         }

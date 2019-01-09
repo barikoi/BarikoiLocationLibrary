@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity  {
                             @Override
                             public void onPlaceListReceived(ArrayList<Place> places) {
                                 Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
-                                Log.d("NearbyAPILIST",""+places.size());
+                                Log.d("Nearby",""+places.size());
                             }
                             @Override
                             public void onFailure(String message) {
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity  {
           @Override
           public void onClick(View view) {
               GeoCodeAPI.builder(getApplicationContext())
-                      .nameOrCode(geo.getText().toString())
+                      .idOrCode(geo.getText().toString())
                       .build()
                       .generateList(new PlaceGeoCodeListener() {
                           @Override
@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity  {
                           @Override
                           public void onFailure(String message) {
                               Toast.makeText(MainActivity.this, ""+ message, Toast.LENGTH_SHORT).show();
-
                           }
                       });
 
@@ -110,13 +109,4 @@ public class MainActivity extends AppCompatActivity  {
       });
 
     }
-   /* @Override
-    public void onPlaceSelected(Place place) {
-        Toast.makeText(MainActivity.this, place.getAddress(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onFailure(String error) {
-        Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
-    }*/
 }

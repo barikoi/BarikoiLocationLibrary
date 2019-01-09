@@ -9,6 +9,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,8 @@ public class NearbyPlaceAPI {
                     Api.nearbyPlacesString+this.distance+"/"+this.limit+"/?latitude="+this.latitude+"&longitude="+this.longitude,
                     (String response) -> {
                         try {
-                            JSONArray placearray = new JSONArray(response);
+                            JSONObject data=new JSONObject(response);
+                            JSONArray placearray = data.getJSONArray("Place");
 
                             if (placearray.length() == 0) {
                                 Log.d(TAG,"No places Found");
