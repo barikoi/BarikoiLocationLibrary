@@ -31,7 +31,7 @@ public class SearchAutoCompleteAPI {
      * @param context is the application context
 
      */
-    public SearchAutoCompleteAPI(Context context,String nameOrCode){
+    private SearchAutoCompleteAPI(Context context,String nameOrCode){
         this.context=context;
         this.nameOrCode=nameOrCode;
     }
@@ -41,7 +41,7 @@ public class SearchAutoCompleteAPI {
     /**
      *  requests the server to get info about the given place name
      */
-    public void generatelist(SearchAutoCompleteListener searchAutoCompleteListener) {
+    public void generateList(SearchAutoCompleteListener searchAutoCompleteListener) {
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
         if (this.nameOrCode.length() > 0) {
@@ -54,19 +54,18 @@ public class SearchAutoCompleteAPI {
 
                             if (placearray.length() == 0) {
                                 Log.d(TAG,"Place Not Found");
-                                searchAutoCompleteListener.OnFailure("Place Not Found!");
+                                searchAutoCompleteListener.onFailure("Place Not Found!");
                             } else {
                                 ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
-                                searchAutoCompleteListener.OnPlaceListReceived(searchPlaces);
+                                searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
                             }
-
                         } catch (JSONException e) {
-                            searchAutoCompleteListener.OnFailure(JsonUtils.logError(TAG,response));
+                            searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
                         }
                     },
                     error ->{
                         Log.d(TAG,JsonUtils.handleResponse(error));
-                        searchAutoCompleteListener.OnFailure(JsonUtils.handleResponse(error));
+                        searchAutoCompleteListener.onFailure(JsonUtils.handleResponse(error));
                     }){
             };
             request.setTag("search");
@@ -80,8 +79,8 @@ public class SearchAutoCompleteAPI {
      * inorder to use the default behaviour of the API.
      */
     public static final class Builder{
-        Context context;
-        String nameOrCode="";
+        private Context context;
+        private String nameOrCode="";
 
         /**
          * Private constructor for initializing the raw SearchAutoComplete.Builder

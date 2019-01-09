@@ -9,7 +9,6 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -21,11 +20,11 @@ import barikoi.barikoilocation.RequestQueueSingleton;
 
 public class NearbyPlaceAPI {
     private static final String TAG="NearbyPlaceApi";
-    Context context;
-    Double distance;
-    int limit;
-    Double latitude;
-    Double longitude;
+    private Context context;
+    private Double distance;
+    private int limit;
+    private Double latitude;
+    private Double longitude;
 
     /**
      * This constructor sets the context of application and a NearbyPlaceAPI listener
@@ -51,19 +50,19 @@ public class NearbyPlaceAPI {
 
                             if (placearray.length() == 0) {
                                 Log.d(TAG,"No places Found");
-                                nearbyPlaceListener.OnFailure("No places Found");
+                                nearbyPlaceListener.onFailure("No places Found");
                             } else {
                                 ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
-                                nearbyPlaceListener.OnPlaceListReceived(searchPlaces);
+                                nearbyPlaceListener.onPlaceListReceived(searchPlaces);
                             }
 
                         } catch (JSONException e) {
-                            nearbyPlaceListener.OnFailure(JsonUtils.logError(TAG,response));
+                            nearbyPlaceListener.onFailure(JsonUtils.logError(TAG,response));
                         }
                     },
                     error ->{
                         Log.d(TAG,JsonUtils.handleResponse(error));
-                        nearbyPlaceListener.OnFailure(JsonUtils.handleResponse(error));
+                        nearbyPlaceListener.onFailure(JsonUtils.handleResponse(error));
                     }){
             };
             request.setTag("search");
@@ -71,7 +70,7 @@ public class NearbyPlaceAPI {
         }
         else{
             Log.d(TAG,"Latitude and Longitude Invalid");
-            nearbyPlaceListener.OnFailure("Latitude and Longitude Invalid");
+            nearbyPlaceListener.onFailure("Latitude and Longitude Invalid");
         }
     }
     public static Builder builder(Context context){

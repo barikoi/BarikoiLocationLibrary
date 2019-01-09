@@ -52,12 +52,11 @@ public class BarikoiSearchAutocomplete extends Fragment{
 
     public interface GetSelectedPlaceListener{
         void getSelectedPlaceListener(Place place);
-        default void getError(String error){};
+        default void getError(String error){}
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 place= (Place) data.getSerializableExtra("place_selected");

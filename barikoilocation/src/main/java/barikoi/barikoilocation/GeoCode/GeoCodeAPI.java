@@ -22,8 +22,8 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  */
 public class GeoCodeAPI {
     private static final String TAG="GeoCodeApi";
-    Context context;
-    String idOrCode;
+    private Context context;
+    private String idOrCode;
 
     /**
      * This constructor sets the context of application and a PlaceGeoCodeAPI listener
@@ -39,7 +39,7 @@ public class GeoCodeAPI {
      * This function makes network call with the api to get the place details
      *  requests the server to get info about the current position
      */
-    public void generatelist(PlaceGeoCodeListener placeGeoCodeListener) {
+    public void generateList(PlaceGeoCodeListener placeGeoCodeListener) {
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
         if (this.idOrCode.length() > 0) {
@@ -70,8 +70,8 @@ public class GeoCodeAPI {
      * inorder to use the default behaviour of the API.
      */
     public static final class Builder{
-        Context context;
-        String idOrCode="";
+        private Context context;
+        private String idOrCode="";
 
         /**
          * Private constructor for initializing the raw GeoCode.Builder

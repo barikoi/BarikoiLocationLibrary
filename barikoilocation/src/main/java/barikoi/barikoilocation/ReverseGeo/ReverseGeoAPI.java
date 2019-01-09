@@ -29,9 +29,9 @@ import barikoi.barikoilocation.RequestQueueSingleton;
 
 public class ReverseGeoAPI {
     private static final String TAG="ReverseGeoApi";
-    Context context;
-    Double latitude;
-    Double longitude;
+    private Context context;
+    private Double latitude;
+    private Double longitude;
 
     /**
      * Build a new object with the proper navigation parameters already setup.
@@ -109,7 +109,7 @@ public class ReverseGeoAPI {
          * @param longitude is the longitude of a point
          * @return a builder class
          */
-       public Builder SetLatLng(Double latitude, Double longitude){
+       public Builder setLatLng(Double latitude, Double longitude){
            this.latitude=latitude;
            this.longitude=longitude;
            return this;

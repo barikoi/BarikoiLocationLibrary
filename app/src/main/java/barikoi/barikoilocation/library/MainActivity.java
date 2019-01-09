@@ -6,14 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 
 import java.util.ArrayList;
 
-import barikoi.barikoilocation.BarikoiAPI;
 import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
@@ -22,8 +18,6 @@ import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.SearchAutoComplete.BarikoiSearchAutocomplete;
-import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteAPI;
-import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteListener;
 
 public class MainActivity extends AppCompatActivity implements BarikoiSearchAutocomplete.GetSelectedPlaceListener {
     Button geoCode,nearby,reverseGeo;
@@ -44,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
             @Override
             public void onClick(View view) {
                 ReverseGeoAPI.builder(getApplicationContext())
-                        .SetLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
+                        .setLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
                         .build()
                         .getAddress(new ReverseGeoAPIListener() {
                             @Override
@@ -70,12 +64,12 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
                         .build()
                         .generateNearbyPlaceList(new NearbyPlaceListener() {
                             @Override
-                            public void OnPlaceListReceived(ArrayList<Place> places) {
+                            public void onPlaceListReceived(ArrayList<Place> places) {
                                 Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
                                 Log.d("NearbyAPILIST",""+places.size());
                             }
                             @Override
-                            public void OnFailure(String message) {
+                            public void onFailure(String message) {
 
                             }
                         });
@@ -87,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements BarikoiSearchAuto
               GeoCodeAPI.builder(getApplicationContext())
                       .nameOrCode(geo.getText().toString())
                       .build()
-                      .generatelist(new PlaceGeoCodeListener() {
+                      .generateList(new PlaceGeoCodeListener() {
                           @Override
                           public void onGeoCodePlace(Place place) {
                               Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
