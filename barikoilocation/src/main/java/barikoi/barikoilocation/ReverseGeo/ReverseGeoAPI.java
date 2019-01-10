@@ -45,6 +45,15 @@ public class ReverseGeoAPI {
         this.latitude=latitude;
         this.longitude=longitude;
     }
+
+    /**
+     * This method builds the Builder of this class
+     * @param context is the application context
+     * @return a new instance of Builder class
+     */
+    public static Builder builder(Context context) {
+        return  new Builder(context);
+    }
     /**
      * Gets the place details of a given latitude and longitude
      */
@@ -65,7 +74,10 @@ public class ReverseGeoAPI {
                             JSONObject place= new JSONObject(response).getJSONArray("Place").getJSONObject(0);
                             Place p=JsonUtils.getPlace(place);
                             if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
-
+                            else {
+                                Log.d(TAG,"ReverseGeo Listener is null");
+                                reverseGeoAPIListener.onFailure("ReverseGeo Listener is null");
+                            }
                         } catch (JSONException e) {
                             reverseGeoAPIListener.onFailure(JsonUtils.logError(TAG,response));
                         }
@@ -82,9 +94,7 @@ public class ReverseGeoAPI {
         queue.add(request);
 
     }
-    public static Builder builder(Context context) {
-        return  new Builder(context);
-    }
+
 
     /**
      * This builder is used to create a new request to the ReverseGeo API
@@ -97,9 +107,9 @@ public class ReverseGeoAPI {
        Double latitude=0.0;
        Double longitude=0.0;
 
-        /**
-         * Private constructor for initializing the raw ReverseGeo.Builder
-         */
+       /**
+        * Private constructor for initializing the raw ReverseGeo.Builder
+        */
        private Builder(Context context){this.context=context;}
 
 

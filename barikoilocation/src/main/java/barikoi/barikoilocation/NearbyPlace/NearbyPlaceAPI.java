@@ -19,6 +19,9 @@ import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 
+/**
+ * This clas is to get the nearby places
+ */
 public class NearbyPlaceAPI {
     private static final String TAG="NearbyPlaceApi";
     private Context context;
@@ -28,8 +31,12 @@ public class NearbyPlaceAPI {
     private Double longitude;
 
     /**
-     * This constructor sets the context of application and a NearbyPlaceAPI listener
+     * This is the private constructor sets the context of application, distance of radius, limit, latitude and longitude
      * @param context is the application context
+     * @param distance is the radius around a place you want to search for
+     * @param limit is the limit to which you want to have places
+     * @param latitude of your given place you want to search nearby
+     * @param longitude of your given place you want to search nearby
      */
     private NearbyPlaceAPI(Context context,Double distance, int limit,Double latitude,Double longitude){
         this.context=context;
@@ -39,6 +46,20 @@ public class NearbyPlaceAPI {
         this.longitude=longitude;
     }
 
+    /**
+     * This method builds the Builder of this class
+     * @param context is the application context
+     * @return a new instance of Builder class
+     */
+    public static Builder builder(Context context){
+        return new Builder(context);
+    }
+
+    /**
+     * This method is to return you the places in nearby area
+     * @param nearbyPlaceListener is the NearbyPlaceListener which will the places nearby
+     *                            and error if any occurs
+     */
     public void generateNearbyPlaceList(NearbyPlaceListener nearbyPlaceListener){
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
@@ -75,9 +96,7 @@ public class NearbyPlaceAPI {
             nearbyPlaceListener.onFailure("Latitude and Longitude Invalid");
         }
     }
-    public static Builder builder(Context context){
-        return new Builder(context);
-    }
+
     /**
      * Checks if the given latitude and longitude is valid or not
      * @param lat of location of which you want to get the nearby places

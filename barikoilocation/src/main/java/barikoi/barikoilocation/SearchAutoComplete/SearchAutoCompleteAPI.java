@@ -35,9 +35,15 @@ public class SearchAutoCompleteAPI {
         this.context=context;
         this.nameOrCode=nameOrCode;
     }
+    /**
+     * This method builds the Builder of this class
+     * @param context is the application context
+     * @return a new instance of Builder class
+     */
     public static Builder builder(Context context){
         return new Builder(context);
     }
+
     /**
      *  requests the server to get info about the given place name
      */
@@ -65,7 +71,6 @@ public class SearchAutoCompleteAPI {
                     },
                     error ->{
                         Log.d(TAG,JsonUtils.handleResponse(error));
-
                         searchAutoCompleteListener.onFailure(JsonUtils.handleResponse(error));
                     }){
             };

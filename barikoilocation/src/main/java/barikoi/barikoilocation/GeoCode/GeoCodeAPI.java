@@ -32,6 +32,12 @@ public class GeoCodeAPI {
         this.context=context;
         this.idOrCode = idOrCode;
     }
+
+    /**
+     * This method builds the Builder of this class
+     * @param context is the application context
+     * @return a new instance of Builder class
+     */
     public static Builder builder(Context context){
         return new Builder(context);
     }

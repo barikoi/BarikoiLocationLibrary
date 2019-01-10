@@ -47,17 +47,6 @@ public class BarikoiAPI {
         validateBarikoiAPI();
         return INSTANCE.accessToken;
     }
-
-    /**
-     * Application context
-     *
-     * @return the application context
-     */
-    @NonNull
-    public static Context getApplicationContext() {
-        validateBarikoiAPI();
-        return INSTANCE.context;
-    }
     /**
      * Runtime validation of BarikoiAPI Token.
      */
