@@ -1,8 +1,10 @@
 package barikoi.barikoilocation;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import barikoi.barikoilocation.BarikoiException.BarikoiAPIConfigurationException;
 
@@ -10,6 +12,10 @@ import barikoi.barikoilocation.BarikoiException.BarikoiAPIConfigurationException
  * This class is to set the context and access token to hit the api server
  */
 public class BarikoiAPI {
+    private static final String TAG="BarikoiAPI";
+    private static final String error="\nUsing BarikoiAPI requires calling BarikoiAPI.getInstance(Context context, String accessToken) before "
+            + "inflating or creating the view. The access token parameter is required when using a BarikoiAPI service."
+            + "\nPlease see https://barikoi.com/#/business/dash to learn how to create one.";
     private static BarikoiAPI INSTANCE;
     private Context context;
     private String accessToken;
@@ -44,15 +50,19 @@ public class BarikoiAPI {
      */
     @Nullable
     public static String getAccessToken() {
-        validateBarikoiAPI();
-        return INSTANCE.accessToken;
+        if(validateBarikoiAPI()){
+            return INSTANCE.accessToken;
+        }
+        else{ return "";}
     }
     /**
      * Runtime validation of BarikoiAPI Token.
      */
-    private static void validateBarikoiAPI() {
+    private static boolean validateBarikoiAPI() {
         if (INSTANCE == null) {
-            throw new BarikoiAPIConfigurationException();
+            Log.e(TAG,error);
+            return false;
         }
+        else{return true;}
     }
 }

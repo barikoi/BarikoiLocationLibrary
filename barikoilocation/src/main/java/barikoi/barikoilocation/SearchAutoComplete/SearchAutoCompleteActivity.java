@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
@@ -79,14 +80,23 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                            .generateList(new SearchAutoCompleteListener() {
                                @Override
                                public void onPlaceListReceived(ArrayList<Place> places) {
-                                   progressBar.setVisibility(View.GONE);
-                                   items.addAll(places);
-                                   placeAdapter.notifyDataSetChanged();
+                                   if(places.size()>0){
+                                       progressBar.setVisibility(View.GONE);
+                                       items.addAll(places);
+                                       placeAdapter.notifyDataSetChanged();
+                                   }
+                                    else listView.emptyshow(true);
                                }
                                @Override
                                public void onFailure(String message) {
-                                   progressBar.setVisibility(View.GONE);
-                                   listView.nonetshow(true);
+                                   if(message.equals("not found")){
+                                       progressBar.setVisibility(View.GONE);
+                                       listView.emptyshow(true);
+                                   }
+                                   else{
+                                       progressBar.setVisibility(View.GONE);
+                                       listView.nonetshow(true);
+                                   }
                                }
                            });
                     editTextSearchAutoComplete.requestFocus();

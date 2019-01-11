@@ -60,7 +60,7 @@ public class SearchAutoCompleteAPI {
 
                             if (placearray.length() == 0) {
                                 Log.d(TAG,"Place Not Found");
-                                searchAutoCompleteListener.onFailure("Place Not Found!");
+                                searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
                             } else {
                                 ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
                                 searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
