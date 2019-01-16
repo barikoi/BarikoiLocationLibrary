@@ -35,6 +35,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private PlaceSearchAdapter placeAdapter;
     private EditText editTextSearchAutoComplete;
     private ProgressBar progressBar;
+    private final static String JSONErrorMessage="not found";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -89,7 +90,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                }
                                @Override
                                public void onFailure(String message) {
-                                   if(message.equals("not found")){
+                                   if(message.equals(JSONErrorMessage)){
                                        progressBar.setVisibility(View.GONE);
                                        listView.emptyshow(true);
                                    }

@@ -21,6 +21,7 @@ import barikoi.barikoilocation.R;
  */
 public class SearchAutocompleteFragment extends Fragment{
     private static final String TAG="SearchAutocomplete";
+    private static final int requestCode=555;
     private PlaceSelectionListener placeSelectionListener;
     Place place;
     EditText barikoiEditText;
@@ -33,14 +34,13 @@ public class SearchAutocompleteFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*onPlaceSelected =(PlaceSelectionListener)BarikoiAPI.getApplicationContext();*/
         barikoiEditText=view.findViewById(R.id.barikoiEditText);
         barikoiEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 barikoiEditText.setText(getContext().getText(R.string.address));
                 Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,requestCode);
             }
         });
     }
@@ -92,5 +92,5 @@ public class SearchAutocompleteFragment extends Fragment{
                 //Write your code if there's no result
             }
         }
-    }//onActivityResult
+    }
 }
