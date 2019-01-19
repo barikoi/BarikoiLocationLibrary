@@ -19,6 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="90.36668110638857" />
+    <EditText
+        android:id="@+id/type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="bank" />
 
     <EditText
         android:id="@+id/geoId"

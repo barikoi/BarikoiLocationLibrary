@@ -21,7 +21,7 @@ import barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment;
 
 public class MainActivity extends AppCompatActivity  {
     Button geoCode,nearby,reverseGeo;
-    EditText lat,lon,geo;
+    EditText lat,lon,geo,type;
     SearchAutocompleteFragment searchAutocompleteFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity  {
         geo=findViewById(R.id.geoId);
         lat=findViewById(R.id.lat);
         lon=findViewById(R.id.lon);
+        type=findViewById(R.id.type);
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
@@ -68,22 +69,23 @@ public class MainActivity extends AppCompatActivity  {
         nearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NearbyPlaceAPI.builder(getApplicationContext())
-                        .setDistance(.5)
-                        .setLimit(10)
-                        .setLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
-                        .build()
-                        .generateNearbyPlaceList(new NearbyPlaceListener() {
-                            @Override
-                            public void onPlaceListReceived(ArrayList<Place> places) {
-                                Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
-                                Log.d("Nearby",""+places.size());
-                            }
-                            @Override
-                            public void onFailure(String message) {
-
-                            }
-                        });
+                    NearbyPlaceAPI.builder(getApplicationContext())
+                            .setDistance(.5)
+                            .setLimit(10)
+                            .setLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
+                            .setType("Bank")
+                            .build()
+                            .generateNearbyPlaceListByType(new NearbyPlaceListener() {
+                                @Override
+                                public void onPlaceListReceived(ArrayList<Place> places) {
+                                    Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
+                                    Log.d("Nearby",""+places.size());
+                                }
+                                @Override
+                                public void onFailure(String message) {
+                                    Toast.makeText(MainActivity.this, "Error: "+message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
             }
         });
       geoCode.setOnClickListener(new View.OnClickListener() {
