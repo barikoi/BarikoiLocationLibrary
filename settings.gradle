@@ -1,1 +1,1 @@
-include ':barikoilocation'
+include ':barikoilocation' , ':app'
