@@ -59,7 +59,7 @@ public class SearchAutocompleteFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1) {
+        if (requestCode == this.requestCode) {
             if(resultCode == Activity.RESULT_OK){
                 place= (Place) data.getSerializableExtra("place_selected");
                 barikoiEditText.setText(place.toString());
