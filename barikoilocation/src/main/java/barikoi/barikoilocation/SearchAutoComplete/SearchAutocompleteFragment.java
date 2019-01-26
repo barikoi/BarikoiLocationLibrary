@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import barikoi.barikoilocation.Place;
 import barikoi.barikoilocation.R;
 
@@ -20,7 +19,7 @@ import barikoi.barikoilocation.R;
  * this ui can be used as a view component in any activity
  */
 public class SearchAutocompleteFragment extends Fragment{
-    private static final String TAG="SearchAutocomplete";
+    private static final String TAG="1";
     private static final int requestCode=555;
     private PlaceSelectionListener placeSelectionListener;
     Place place;
@@ -58,7 +57,7 @@ public class SearchAutocompleteFragment extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == this.requestCode) {
             if(resultCode == Activity.RESULT_OK){
                 place= (Place) data.getSerializableExtra("place_selected");
