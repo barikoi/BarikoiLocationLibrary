@@ -1,8 +1,6 @@
 package barikoi.barikoilocation.ReverseGeo;
 
-import android.location.Location;
-
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoPlaceModel;
 
 
 /**
@@ -14,7 +12,7 @@ public interface ReverseGeoAPIListener {
       * Receives the place from Reverse geo network call
       * @param place received from the server
       */
-      void reversedAddress(Place place);
+      void reversedAddress(ReverseGeoPlaceModel place);
 
     /**
      * Receives errors occurred after the network call

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 /**
@@ -62,7 +62,7 @@ public class SearchAutoCompleteAPI {
                                 Log.d(TAG,"Place Not Found");
                                 searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
                             } else {
-                                ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
+                                ArrayList<SearchAutoCompletePlaceModel> searchPlaces = JsonUtils.getSearchAutoCompletePlaces(placearray);
                                 searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
                             }
                         } catch (JSONException e) {

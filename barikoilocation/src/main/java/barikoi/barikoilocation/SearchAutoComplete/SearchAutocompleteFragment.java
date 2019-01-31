@@ -11,7 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import barikoi.barikoilocation.Place;
+
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
 import barikoi.barikoilocation.R;
 
 /**
@@ -22,7 +23,7 @@ public class SearchAutocompleteFragment extends Fragment{
     private static final String TAG="1";
     private static final int requestCode=555;
     private PlaceSelectionListener placeSelectionListener;
-    Place place;
+    SearchAutoCompletePlaceModel place;
     EditText barikoiEditText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +52,7 @@ public class SearchAutocompleteFragment extends Fragment{
       catch (Exception e){}
     }
     public interface PlaceSelectionListener {
-        void onPlaceSelected(Place place);
+        void onPlaceSelected(SearchAutoCompletePlaceModel place);
         void onFailure(String error);
     }
 
@@ -60,7 +61,7 @@ public class SearchAutocompleteFragment extends Fragment{
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == this.requestCode) {
             if(resultCode == Activity.RESULT_OK){
-                place= (Place) data.getSerializableExtra("place_selected");
+                place= (SearchAutoCompletePlaceModel) data.getSerializableExtra("place_selected");
                 barikoiEditText.setText(place.toString());
                 try {
                     this.placeSelectionListener.onPlaceSelected(this.place);

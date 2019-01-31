@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 /**
@@ -54,7 +54,7 @@ public class GeoCodeAPI {
                     (String response) -> {
                         try {
                             JSONObject data = new JSONArray(response).getJSONObject(0);
-                                Place place = JsonUtils.getPlace(data);
+                                GeoCodePlaceModel place = JsonUtils.getGeoCodePlace(data);
                                 placeGeoCodeListener.onGeoCodePlace(place);
                         } catch (JSONException e) {
                             placeGeoCodeListener.onFailure(JsonUtils.logError(TAG,response));

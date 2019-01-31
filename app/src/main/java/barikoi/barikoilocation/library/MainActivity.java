@@ -14,9 +14,14 @@ import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceListener;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
+import barikoi.barikoilocation.PlaceModels.NearbyPlacesByCategoryPlaceModel;
+import barikoi.barikoilocation.PlaceModels.NearbyPlacesModel;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoPlaceModel;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.Place;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment;
 
 public class MainActivity extends AppCompatActivity  {
@@ -37,7 +42,8 @@ public class MainActivity extends AppCompatActivity  {
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(Place place) {
+            public void onPlaceSelected(SearchAutoCompletePlaceModel place) {
+                Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
                 Log.d("MainActivity",""+place.getAddress());
             }
 
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity  {
                         .build()
                         .getAddress(new ReverseGeoAPIListener() {
                             @Override
-                            public void reversedAddress(Place place) {
+                            public void reversedAddress(ReverseGeoPlaceModel place) {
                                 Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
                                 Log.d("ReverseGeoPlace",""+place.getAddress());
                             }
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity  {
                             .build()
                             .generateNearbyPlaceListByType(new NearbyPlaceListener() {
                                 @Override
-                                public void onPlaceListReceived(ArrayList<Place> places) {
+                                public void onPlaceListReceivedByCategory(ArrayList<NearbyPlacesByCategoryPlaceModel> places) {
                                     Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
                                     Log.d("Nearby",""+places.size());
                                 }
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity  {
                       .build()
                       .generateList(new PlaceGeoCodeListener() {
                           @Override
-                          public void onGeoCodePlace(Place place) {
+                          public void onGeoCodePlace(GeoCodePlaceModel place) {
                               Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
                               Log.d("onGeoCodePlace",""+place.getAddress());
                           }

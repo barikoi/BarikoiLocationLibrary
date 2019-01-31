@@ -3,9 +3,7 @@ package barikoi.barikoilocation.ReverseGeo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -20,7 +18,7 @@ import org.json.JSONObject;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoPlaceModel;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 /**
@@ -72,7 +70,7 @@ public class ReverseGeoAPI {
                         }
                         try {
                             JSONObject place= new JSONObject(response).getJSONArray("Place").getJSONObject(0);
-                            Place p=JsonUtils.getPlace(place);
+                            ReverseGeoPlaceModel p=JsonUtils.getReverseGeoPlace(place);
                             if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
                             else {
                                 Log.d(TAG,"ReverseGeo Listener is null");

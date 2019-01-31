@@ -7,19 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
 import java.util.ArrayList;
 
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
 import barikoi.barikoilocation.R;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
@@ -29,7 +27,7 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  */
 public class SearchAutoCompleteActivity extends AppCompatActivity {
 
-    private ArrayList<Place> items;
+    private ArrayList<SearchAutoCompletePlaceModel> items;
     private RequestQueue queue;
     private RecyclerViewEmptySupport listView;
     private PlaceSearchAdapter placeAdapter;
@@ -80,7 +78,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                            .build()
                            .generateList(new SearchAutoCompleteListener() {
                                @Override
-                               public void onPlaceListReceived(ArrayList<Place> places) {
+                               public void onPlaceListReceived(ArrayList<SearchAutoCompletePlaceModel> places) {
                                    if(places.size()>0){
                                        progressBar.setVisibility(View.GONE);
                                        items.addAll(places);
@@ -121,7 +119,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private void init(){
         queue= RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
         editTextSearchAutoComplete =findViewById(R.id.barikoiEditText);
-        items=new ArrayList<Place>();
+        items=new ArrayList<SearchAutoCompletePlaceModel>();
         listView= findViewById(R.id.searchedplacelist);
         View emptyList=findViewById(R.id.LinearLayoutListEmpty);
         View noNetList=findViewById(R.id.LinearLayoutNoNetContainer);
@@ -129,7 +127,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         listView.setEmptyView(emptyList);
         placeAdapter=new PlaceSearchAdapter(items, new PlaceSearchAdapter.OnPlaceItemSelectListener() {
             @Override
-            public void onPlaceSelected(Place mItem, int position) {
+            public void onPlaceSelected(SearchAutoCompletePlaceModel mItem, int position) {
                 Intent returnIntent = getIntent();
                 returnIntent.putExtra("place_selected",mItem);
                 setResult(Activity.RESULT_OK,returnIntent);

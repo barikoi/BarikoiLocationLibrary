@@ -2,7 +2,6 @@ package barikoi.barikoilocation.NearbyPlace;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,7 +15,9 @@ import java.util.ArrayList;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.NearbyPlacesByCategoryPlaceModel;
+import barikoi.barikoilocation.PlaceModels.NearbyPlacesModel;
+import barikoi.barikoilocation.PlaceModels.Place;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 
@@ -93,7 +94,7 @@ public class NearbyPlaceAPI {
                                 Log.d(TAG,"No places Found");
                                 nearbyPlaceListener.onFailure("No places Found");
                             } else {
-                                ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
+                                ArrayList<NearbyPlacesModel> searchPlaces = JsonUtils.getNearbyPlaces(placearray);
                                 nearbyPlaceListener.onPlaceListReceived(searchPlaces);
                             }
 
@@ -133,8 +134,8 @@ public class NearbyPlaceAPI {
                                 Log.d(TAG,"No places Found");
                                 nearbyPlaceListener.onFailure("No places Found");
                             } else {
-                                ArrayList<Place> searchPlaces = JsonUtils.getPlaces(placearray);
-                                nearbyPlaceListener.onPlaceListReceived(searchPlaces);
+                                ArrayList<NearbyPlacesByCategoryPlaceModel> searchPlaces = JsonUtils.getNearbyPlacesByCategory(placearray);
+                                nearbyPlaceListener.onPlaceListReceivedByCategory(searchPlaces);
                             }
 
                         } catch (JSONException e) {

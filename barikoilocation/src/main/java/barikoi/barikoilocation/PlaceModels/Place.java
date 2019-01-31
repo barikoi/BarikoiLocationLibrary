@@ -1,4 +1,4 @@
-package barikoi.barikoilocation;
+package barikoi.barikoilocation.PlaceModels;
 
 import java.io.Serializable;
 

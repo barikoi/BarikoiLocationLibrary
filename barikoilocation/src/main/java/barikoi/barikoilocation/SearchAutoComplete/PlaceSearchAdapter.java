@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import barikoi.barikoilocation.Place;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
 import barikoi.barikoilocation.R;
 
 /**
@@ -18,12 +18,12 @@ import barikoi.barikoilocation.R;
  */
 public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<Place> places;
+    private ArrayList<SearchAutoCompletePlaceModel> places;
     ///private Context context;
     private OnPlaceItemSelectListener opsl;
     //private ArrayList<Place> placeListFiltered;
 
-    public PlaceSearchAdapter(ArrayList<Place> places, OnPlaceItemSelectListener opsl){
+    public PlaceSearchAdapter(ArrayList<SearchAutoCompletePlaceModel> places, OnPlaceItemSelectListener opsl){
         this.places=places;
         //this.placeListFiltered=places;
         this.opsl=opsl;
@@ -62,16 +62,16 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
-                ArrayList<Place> filteredList = new ArrayList<Place>();
+                ArrayList<SearchAutoCompletePlaceModel> filteredList = new ArrayList<SearchAutoCompletePlaceModel>();
                 if (charString.isEmpty()) {
                     filteredList = places;
                 } else {
 
-                    for (Place row : places) {
+                    for (SearchAutoCompletePlaceModel row : places) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.getAddress().toLowerCase().contains(charString.toLowerCase()) || row.getSubType().contains(charString) || row.getCode().contains(charString)) {
+                        if (row.getAddress().toLowerCase().contains(charString.toLowerCase())  || row.getCode().contains(charString)) {
                             filteredList.add(row);
                         }
                     }
@@ -91,7 +91,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             }
         };
     }
-    public ArrayList<Place> getList() {
+    public ArrayList<SearchAutoCompletePlaceModel> getList() {
         return places;
     }
 
@@ -100,7 +100,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         public final View mView;
         public final TextView placeView;
         public final TextView areatag;
-        public Place mItem;
+        public SearchAutoCompletePlaceModel mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -112,7 +112,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
     public interface OnPlaceItemSelectListener{
 
-        void onPlaceSelected(Place mItem, int position);
+        void onPlaceSelected(SearchAutoCompletePlaceModel mItem, int position);
     }
 }
 
