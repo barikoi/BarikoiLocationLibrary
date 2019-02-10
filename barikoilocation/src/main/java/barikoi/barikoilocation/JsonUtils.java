@@ -56,6 +56,7 @@ public final class JsonUtils {
                 String phoneNumber=jsonObject.has("contact_person_phone")? jsonObject.getString("contact_person_phone"):"";
 
                 NearbyPlacesByCategoryPlaceModel newplace = new NearbyPlacesByCategoryPlaceModel(id,distance_within_meters,lon,lat,address,city, area,pType,subType,code,phoneNumber);
+               
                 newplaces.add(newplace);
             }
         }catch (Exception e){

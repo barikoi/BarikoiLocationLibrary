@@ -7,16 +7,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
 import java.util.ArrayList;
 
+import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
+import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
 import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
 import barikoi.barikoilocation.R;
 import barikoi.barikoilocation.RequestQueueSingleton;
@@ -34,6 +39,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private EditText editTextSearchAutoComplete;
     private ProgressBar progressBar;
     private final static String JSONErrorMessage="not found";
+    private final static String TAG="SearchACActivity";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -128,11 +134,25 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         placeAdapter=new PlaceSearchAdapter(items, new PlaceSearchAdapter.OnPlaceItemSelectListener() {
             @Override
             public void onPlaceSelected(SearchAutoCompletePlaceModel mItem, int position) {
-                Intent returnIntent = getIntent();
-                returnIntent.putExtra("place_selected",mItem);
-                setResult(Activity.RESULT_OK,returnIntent);
-                finish();
+                GeoCodeAPI.builder(getApplicationContext())
+                        .idOrCode(mItem.getId())
+                        .build()
+                        .generateList(new PlaceGeoCodeListener() {
+                            @Override
+                            public void onGeoCodePlace(GeoCodePlaceModel place) {
+                                Intent returnIntent = getIntent();
+                                returnIntent.putExtra("place_selected",place);
+                                setResult(Activity.RESULT_OK,returnIntent);
+                                finish();
+                            }
+                            @Override
+                            public void onFailure(String message) {
+                                Log.d(TAG,message);
+                            }
+                        });
+
             }
+
         });
         listView.setAdapter(placeAdapter);
         editTextSearchAutoComplete.requestFocus();
