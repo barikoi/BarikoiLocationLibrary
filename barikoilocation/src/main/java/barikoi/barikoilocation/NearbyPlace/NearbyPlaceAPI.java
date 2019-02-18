@@ -15,9 +15,7 @@ import java.util.ArrayList;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
-import barikoi.barikoilocation.PlaceModels.NearbyPlacesByCategoryPlaceModel;
-import barikoi.barikoilocation.PlaceModels.NearbyPlacesModel;
-import barikoi.barikoilocation.PlaceModels.Place;
+import barikoi.barikoilocation.PlaceModels.NearbyPlace;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 
@@ -94,7 +92,7 @@ public class NearbyPlaceAPI {
                                 Log.d(TAG,"No places Found");
                                 nearbyPlaceListener.onFailure("No places Found");
                             } else {
-                                ArrayList<NearbyPlacesModel> searchPlaces = JsonUtils.getNearbyPlaces(placearray);
+                                ArrayList<NearbyPlace> searchPlaces = JsonUtils.getNearbyPlace(placearray);
                                 nearbyPlaceListener.onPlaceListReceived(searchPlaces);
                             }
 
@@ -134,8 +132,8 @@ public class NearbyPlaceAPI {
                                 Log.d(TAG,"No places Found");
                                 nearbyPlaceListener.onFailure("No places Found");
                             } else {
-                                ArrayList<NearbyPlacesByCategoryPlaceModel> searchPlaces = JsonUtils.getNearbyPlacesByCategory(placearray);
-                                nearbyPlaceListener.onPlaceListReceivedByCategory(searchPlaces);
+                                ArrayList<NearbyPlace> searchPlaces = JsonUtils.getNearbyPlace(placearray);
+                                nearbyPlaceListener.onPlaceListReceived(searchPlaces);
                             }
 
                         } catch (JSONException e) {

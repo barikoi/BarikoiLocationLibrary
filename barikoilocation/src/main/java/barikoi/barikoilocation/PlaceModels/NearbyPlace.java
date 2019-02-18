@@ -2,10 +2,10 @@ package barikoi.barikoilocation.PlaceModels;
 
 import java.io.Serializable;
 
-public class NearbyPlacesModel extends ReverseGeoPlaceModel implements Serializable {
-    protected String  longitude,latitude,type,subType;
-    public NearbyPlacesModel(){}
-    public NearbyPlacesModel(String id, double distance_within_meters, String longitude, String latitude, String address, String city, String area, String type, String subType, String code){
+public class NearbyPlace extends ReverseGeoPlace implements Serializable {
+    protected String  longitude,latitude,type,subType,phoneNumber;;
+    public NearbyPlace(){}
+    public NearbyPlace(String id, double distance_within_meters, String longitude, String latitude, String address, String city, String area, String type, String subType, String code,String phoneNumber){
         this.id=id;
         this.distance_within_meters=distance_within_meters;
         this.longitude=longitude;
@@ -16,6 +16,7 @@ public class NearbyPlacesModel extends ReverseGeoPlaceModel implements Serializa
         this.type=type;
         this.subType=subType;
         this.code=code;
+        this.phoneNumber=phoneNumber;
     }
     public String getLongitude() {
         return longitude;
@@ -24,6 +25,7 @@ public class NearbyPlacesModel extends ReverseGeoPlaceModel implements Serializa
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
+
     public String getLatitude() {
         return latitude;
     }
@@ -47,6 +49,10 @@ public class NearbyPlacesModel extends ReverseGeoPlaceModel implements Serializa
     public void setSubType(String subType) {
         this.subType = subType;
     }
+
+    public String getPhoneNumber() { return phoneNumber; }
+
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     @Override
     public String toString() {

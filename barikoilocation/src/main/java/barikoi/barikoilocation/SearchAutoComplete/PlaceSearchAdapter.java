@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.R;
 
 /**
@@ -18,12 +18,12 @@ import barikoi.barikoilocation.R;
  */
 public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<SearchAutoCompletePlaceModel> places;
+    private ArrayList<SearchAutoCompletePlace> places;
     ///private Context context;
     private OnPlaceItemSelectListener opsl;
     //private ArrayList<Place> placeListFiltered;
 
-    public PlaceSearchAdapter(ArrayList<SearchAutoCompletePlaceModel> places, OnPlaceItemSelectListener opsl){
+    public PlaceSearchAdapter(ArrayList<SearchAutoCompletePlace> places, OnPlaceItemSelectListener opsl){
         this.places=places;
         //this.placeListFiltered=places;
         this.opsl=opsl;
@@ -62,12 +62,12 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
-                ArrayList<SearchAutoCompletePlaceModel> filteredList = new ArrayList<SearchAutoCompletePlaceModel>();
+                ArrayList<SearchAutoCompletePlace> filteredList = new ArrayList<SearchAutoCompletePlace>();
                 if (charString.isEmpty()) {
                     filteredList = places;
                 } else {
 
-                    for (SearchAutoCompletePlaceModel row : places) {
+                    for (SearchAutoCompletePlace row : places) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
@@ -91,7 +91,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             }
         };
     }
-    public ArrayList<SearchAutoCompletePlaceModel> getList() {
+    public ArrayList<SearchAutoCompletePlace> getList() {
         return places;
     }
 
@@ -100,7 +100,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         public final View mView;
         public final TextView placeView;
         public final TextView areatag;
-        public SearchAutoCompletePlaceModel mItem;
+        public SearchAutoCompletePlace mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -112,7 +112,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
     public interface OnPlaceItemSelectListener{
 
-        void onPlaceSelected(SearchAutoCompletePlaceModel mItem, int position);
+        void onPlaceSelected(SearchAutoCompletePlace mItem, int position);
     }
 }
 

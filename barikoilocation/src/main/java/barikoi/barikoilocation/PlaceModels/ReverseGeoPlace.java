@@ -2,12 +2,12 @@ package barikoi.barikoilocation.PlaceModels;
 
 import java.io.Serializable;
 
-public class ReverseGeoPlaceModel extends SearchAutoCompletePlaceModel implements Serializable {
+public class ReverseGeoPlace extends SearchAutoCompletePlace implements Serializable {
     protected String city;
     protected double distance_within_meters;
 
-    public ReverseGeoPlaceModel(){}
-    public ReverseGeoPlaceModel(String id, String address, String area, String city, double distance_within_meters){
+    public ReverseGeoPlace(){}
+    public ReverseGeoPlace(String id, String address, String area, String city, double distance_within_meters){
         this.id=id;
         this.address=address;
         this.area=area;

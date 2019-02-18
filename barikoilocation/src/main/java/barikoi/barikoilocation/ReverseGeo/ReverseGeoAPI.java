@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
-import barikoi.barikoilocation.PlaceModels.ReverseGeoPlaceModel;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
 /**
@@ -70,7 +70,7 @@ public class ReverseGeoAPI {
                         }
                         try {
                             JSONObject place= new JSONObject(response).getJSONArray("Place").getJSONObject(0);
-                            ReverseGeoPlaceModel p=JsonUtils.getReverseGeoPlace(place);
+                            ReverseGeoPlace p=JsonUtils.getReverseGeoPlace(place);
                             if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
                             else {
                                 Log.d(TAG,"ReverseGeo Listener is null");

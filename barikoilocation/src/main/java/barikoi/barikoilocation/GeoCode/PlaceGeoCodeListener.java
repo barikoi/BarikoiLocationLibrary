@@ -1,6 +1,6 @@
 package barikoi.barikoilocation.GeoCode;
 
-import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
 
 
 /**
@@ -11,7 +11,7 @@ public interface PlaceGeoCodeListener {
      * Receives the place from Geocode network call
      * @param place received from the server
      */
-    void onGeoCodePlace(GeoCodePlaceModel place);
+    void onGeoCodePlace(GeoCodePlace place);
 
     /**
      * Receives errors occurred after the network call

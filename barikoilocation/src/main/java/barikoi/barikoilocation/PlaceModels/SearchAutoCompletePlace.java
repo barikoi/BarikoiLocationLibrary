@@ -2,12 +2,12 @@ package barikoi.barikoilocation.PlaceModels;
 
 import java.io.Serializable;
 
-public class SearchAutoCompletePlaceModel implements Serializable {
+public class SearchAutoCompletePlace implements Serializable {
     protected String id, address,code,area;
 
-    public SearchAutoCompletePlaceModel(){}
+    public SearchAutoCompletePlace(){}
 
-    public SearchAutoCompletePlaceModel(String id, String address, String code, String area){
+    public SearchAutoCompletePlace(String id, String address, String code, String area){
         this.id=id;
         this.address=address;
         this.code=code;

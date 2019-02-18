@@ -3,6 +3,8 @@ package barikoi.barikoilocation.SearchAutoComplete;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
@@ -21,8 +22,8 @@ import java.util.ArrayList;
 
 import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
-import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
-import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.R;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
@@ -32,7 +33,7 @@ import barikoi.barikoilocation.RequestQueueSingleton;
  */
 public class SearchAutoCompleteActivity extends AppCompatActivity {
 
-    private ArrayList<SearchAutoCompletePlaceModel> items;
+    private ArrayList<SearchAutoCompletePlace> items;
     private RequestQueue queue;
     private RecyclerViewEmptySupport listView;
     private PlaceSearchAdapter placeAdapter;
@@ -40,7 +41,8 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private final static String JSONErrorMessage="not found";
     private final static String TAG="SearchACActivity";
-
+    private static final int AUTOCOMPLETE_DELAY = 300;
+    private static final int MESSAGE_TEXT_CHANGED = 0;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,35 +78,11 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                 editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
                 progressBar.setVisibility(View.VISIBLE);
                 if(charSequence.length()>=2){
-                    items.clear();
-                    placeAdapter.notifyDataSetChanged();
                     queue.cancelAll("search");
-                    SearchAutoCompleteAPI.builder(getApplicationContext())
-                           .nameOrCode(charSequence.toString())
-                           .build()
-                           .generateList(new SearchAutoCompleteListener() {
-                               @Override
-                               public void onPlaceListReceived(ArrayList<SearchAutoCompletePlaceModel> places) {
-                                   if(places.size()>0){
-                                       progressBar.setVisibility(View.GONE);
-                                       items.addAll(places);
-                                       placeAdapter.notifyDataSetChanged();
-                                   }
-                                    else listView.emptyshow(true);
-                               }
-                               @Override
-                               public void onFailure(String message) {
-                                   if(message.equals(JSONErrorMessage)){
-                                       progressBar.setVisibility(View.GONE);
-                                       listView.emptyshow(true);
-                                   }
-                                   else{
-                                       progressBar.setVisibility(View.GONE);
-                                       listView.nonetshow(true);
-                                   }
-                               }
-                           });
-                    editTextSearchAutoComplete.requestFocus();
+                    mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
+                    final Message msg = Message.obtain(mHandler, MESSAGE_TEXT_CHANGED, charSequence.toString());
+                    mHandler.sendMessageDelayed(msg, AUTOCOMPLETE_DELAY);
+
                 }
                 else {
                     progressBar.setVisibility(View.GONE);
@@ -125,7 +103,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private void init(){
         queue= RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
         editTextSearchAutoComplete =findViewById(R.id.barikoiEditText);
-        items=new ArrayList<SearchAutoCompletePlaceModel>();
+        items=new ArrayList<SearchAutoCompletePlace>();
         listView= findViewById(R.id.searchedplacelist);
         View emptyList=findViewById(R.id.LinearLayoutListEmpty);
         View noNetList=findViewById(R.id.LinearLayoutNoNetContainer);
@@ -133,13 +111,13 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         listView.setEmptyView(emptyList);
         placeAdapter=new PlaceSearchAdapter(items, new PlaceSearchAdapter.OnPlaceItemSelectListener() {
             @Override
-            public void onPlaceSelected(SearchAutoCompletePlaceModel mItem, int position) {
+            public void onPlaceSelected(SearchAutoCompletePlace mItem, int position) {
                 GeoCodeAPI.builder(getApplicationContext())
                         .idOrCode(mItem.getId())
                         .build()
                         .generateList(new PlaceGeoCodeListener() {
                             @Override
-                            public void onGeoCodePlace(GeoCodePlaceModel place) {
+                            public void onGeoCodePlace(GeoCodePlace place) {
                                 Intent returnIntent = getIntent();
                                 returnIntent.putExtra("place_selected",place);
                                 setResult(Activity.RESULT_OK,returnIntent);
@@ -158,4 +136,42 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         editTextSearchAutoComplete.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == MESSAGE_TEXT_CHANGED) {
+                String enteredText = (String)msg
+                        .obj;
+                items.clear();
+                placeAdapter.notifyDataSetChanged();
+                queue.cancelAll("search");
+                SearchAutoCompleteAPI.builder(getApplicationContext())
+                        .nameOrCode(enteredText)
+                        .build()
+                        .generateList(new SearchAutoCompleteListener() {
+                            @Override
+                            public void onPlaceListReceived(ArrayList<SearchAutoCompletePlace> places) {
+                                if(places.size()>0){
+                                    progressBar.setVisibility(View.GONE);
+                                    items.addAll(places);
+                                    placeAdapter.notifyDataSetChanged();
+                                }
+                                else listView.emptyshow(true);
+                            }
+                            @Override
+                            public void onFailure(String message) {
+                                if(message.equals(JSONErrorMessage)){
+                                    progressBar.setVisibility(View.GONE);
+                                    listView.emptyshow(true);
+                                }
+                                else{
+                                    progressBar.setVisibility(View.GONE);
+                                    listView.nonetshow(true);
+                                }
+                            }
+                        });
+            }
+        }
+    };
 }

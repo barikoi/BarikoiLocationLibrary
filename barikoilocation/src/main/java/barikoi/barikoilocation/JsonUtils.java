@@ -18,12 +18,10 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import barikoi.barikoilocation.PlaceModels.NearbyPlacesByCategoryPlaceModel;
-import barikoi.barikoilocation.PlaceModels.NearbyPlacesModel;
-import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
-import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
-import barikoi.barikoilocation.PlaceModels.Place;
-import barikoi.barikoilocation.PlaceModels.ReverseGeoPlaceModel;
+import barikoi.barikoilocation.PlaceModels.NearbyPlace;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
 
 /**
  * This class is used to handle all the JSON Data received from server API
@@ -37,8 +35,8 @@ public final class JsonUtils {
      * @param placearray is a JSONArray from server
      * @return a arraylist of places
      */
-    public static ArrayList<NearbyPlacesByCategoryPlaceModel> getNearbyPlacesByCategory(JSONArray placearray){
-        ArrayList<NearbyPlacesByCategoryPlaceModel> newplaces=new ArrayList<NearbyPlacesByCategoryPlaceModel>();
+    public static ArrayList<NearbyPlace> getNearbyPlace(JSONArray placearray){
+        ArrayList<NearbyPlace> newplaces=new ArrayList<NearbyPlace>();
         try {
             for (int i = 0; i < placearray.length(); i++) {
                 JSONObject jsonObject = placearray.getJSONObject(i);
@@ -55,38 +53,7 @@ public final class JsonUtils {
                 String subType=jsonObject.has("subType")? jsonObject.getString("subType"):"";
                 String phoneNumber=jsonObject.has("contact_person_phone")? jsonObject.getString("contact_person_phone"):"";
 
-                NearbyPlacesByCategoryPlaceModel newplace = new NearbyPlacesByCategoryPlaceModel(id,distance_within_meters,lon,lat,address,city, area,pType,subType,code,phoneNumber);
-               
-                newplaces.add(newplace);
-            }
-        }catch (Exception e){
-            Log.d("JsonUtils",e.getLocalizedMessage());
-        }
-        return newplaces;
-    }
-    /**
-     * This checks the json object for place attributes. If the object has the attribute then, this function sets it
-     * otherwise sets the attribute as empty string
-     * @param placearray is a JSONArray from server
-     * @return a arraylist of places
-     */
-    public static ArrayList<NearbyPlacesModel> getNearbyPlaces(JSONArray placearray){
-        ArrayList<NearbyPlacesModel> newplaces=new ArrayList<NearbyPlacesModel>();
-        try {
-            for (int i = 0; i < placearray.length(); i++) {
-                JSONObject jsonObject = placearray.getJSONObject(i);
-                String id = jsonObject.has("id")? jsonObject.getString("id"):"";
-                double distance_within_meters = jsonObject.has("distance_within_meters")?jsonObject.getDouble("distance_within_meters"):0.0;
-                String lon = jsonObject.has("longitude")? jsonObject.getString("longitude"):"";
-                String lat = jsonObject.has("latitude")?jsonObject.getString("latitude"):"";
-                String address =jsonObject.has("Address")? jsonObject.getString("Address"):"";
-                String city=jsonObject.has("city")? jsonObject.getString("city"):"";
-                String code = jsonObject.has("uCode")?jsonObject.getString("uCode"):"";
-                String area=jsonObject.has("area")? jsonObject.getString("area"):"";
-                String pType=jsonObject.has("pType")? jsonObject.getString("pType"):"";
-                String subType=jsonObject.has("subType")? jsonObject.getString("subType"):"";
-
-                NearbyPlacesModel newplace = new NearbyPlacesModel(id,distance_within_meters,lon,lat,address,city, area,pType,subType,code);
+                NearbyPlace newplace = new NearbyPlace(id,distance_within_meters,lon,lat,address,city, area,pType,subType,code,phoneNumber);
                 newplaces.add(newplace);
             }
         }catch (Exception e){
@@ -101,8 +68,8 @@ public final class JsonUtils {
      * @param placearray is a JSONArray from server
      * @return a arraylist of places
      */
-    public static ArrayList<SearchAutoCompletePlaceModel> getSearchAutoCompletePlaces(JSONArray placearray){
-        ArrayList<SearchAutoCompletePlaceModel> newplaces=new ArrayList<SearchAutoCompletePlaceModel>();
+    public static ArrayList<SearchAutoCompletePlace> getSearchAutoCompletePlaces(JSONArray placearray){
+        ArrayList<SearchAutoCompletePlace> newplaces=new ArrayList<SearchAutoCompletePlace>();
         try {
             for (int i = 0; i < placearray.length(); i++) {
                 JSONObject report = placearray.getJSONObject(i);
@@ -111,7 +78,7 @@ public final class JsonUtils {
                 String code = report.has("uCode")?report.getString("uCode"):"";
                 String area=report.has("area")? report.getString("area"):"";
 
-                SearchAutoCompletePlaceModel newplace = new SearchAutoCompletePlaceModel(id,address, code, area);
+                SearchAutoCompletePlace newplace = new SearchAutoCompletePlace(id,address, code, area);
                 newplaces.add(newplace);
             }
         }catch (Exception e){
@@ -125,7 +92,7 @@ public final class JsonUtils {
      * @param jsonObject takes a json object and structures the data and return a place
      * @return a structured place
      */
-    public static GeoCodePlaceModel getGeoCodePlace(JSONObject jsonObject){
+    public static GeoCodePlace getGeoCodePlace(JSONObject jsonObject){
         try{
             String lon = jsonObject.has("longitude")? jsonObject.getString("longitude"):"";
             String lat = jsonObject.has("latitude")?jsonObject.getString("latitude"):"";
@@ -140,7 +107,7 @@ public final class JsonUtils {
 
             JSONArray images=jsonObject.has("images")?  jsonObject.getJSONArray("images"): new JSONArray();
 
-            GeoCodePlaceModel newplace = new GeoCodePlaceModel(address, lon, lat, code, city, area, postal, pType, subType);
+            GeoCodePlace newplace = new GeoCodePlace(address, lon, lat, code, city, area, postal, pType, subType);
 
             if (images.length() > 0) {
                 JSONObject image = images.getJSONObject(0);
@@ -163,7 +130,7 @@ public final class JsonUtils {
      * @param jsonObject takes a json object and structures the data and return a place
      * @return a structured place
      */
-    public static ReverseGeoPlaceModel getReverseGeoPlace(JSONObject jsonObject){
+    public static ReverseGeoPlace getReverseGeoPlace(JSONObject jsonObject){
         try{
             double distance_within_meters = jsonObject.has("distance_within_meters")?jsonObject.getDouble("distance_within_meters"):0.0;
             String id = jsonObject.has("id")?jsonObject.getString("id"):"";
@@ -171,7 +138,7 @@ public final class JsonUtils {
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
 
-            ReverseGeoPlaceModel newplace = new ReverseGeoPlaceModel(id,address, city, area,distance_within_meters);
+            ReverseGeoPlace newplace = new ReverseGeoPlace(id,address, city, area,distance_within_meters);
 
             Log.d("JsonUtils",""+newplace.getAddress());
             return newplace;

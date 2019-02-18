@@ -2,13 +2,13 @@ package barikoi.barikoilocation.PlaceModels;
 
 import java.io.Serializable;
 
-public class GeoCodePlaceModel extends SearchAutoCompletePlaceModel implements Serializable {
+public class GeoCodePlace extends SearchAutoCompletePlace implements Serializable {
 
     private String latitude,longitude,type,subType,city,postalcode, route_description, imglink;
 
-    public GeoCodePlaceModel(){}
+    public GeoCodePlace(){}
 
-    public GeoCodePlaceModel(String address, String lon, String lat, String code, String city, String area, String postalcode, String type, String subType ){
+    public GeoCodePlace(String address, String lon, String lat, String code, String city, String area, String postalcode, String type, String subType ){
         this.address=address;
         this.latitude=lat;
         this.longitude=lon;
@@ -60,5 +60,37 @@ public class GeoCodePlaceModel extends SearchAutoCompletePlaceModel implements S
         if(!(city.equals(null)||city.equals("")||city.equals("null")))
             str+=", "+city;
         return str;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 }
