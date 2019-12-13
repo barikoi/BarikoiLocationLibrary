@@ -74,7 +74,7 @@ public final class JsonUtils {
             for (int i = 0; i < placearray.length(); i++) {
                 JSONObject report = placearray.getJSONObject(i);
                 String id = report.has("id")? report.getString("id"):"";
-                String address =report.has("Address")? report.getString("Address"):"";
+                String address =report.has("address")? report.getString("address"):"";
                 String code = report.has("uCode")?report.getString("uCode"):"";
                 String area=report.has("area")? report.getString("area"):"";
 
@@ -96,7 +96,7 @@ public final class JsonUtils {
         try{
             String lon = jsonObject.has("longitude")? jsonObject.getString("longitude"):"";
             String lat = jsonObject.has("latitude")?jsonObject.getString("latitude"):"";
-            String address =jsonObject.has("Address")? jsonObject.getString("Address"):"";
+            String address =jsonObject.has("address")? jsonObject.getString("address"):"";
             String code = jsonObject.has("uCode")?jsonObject.getString("uCode"):"";
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
@@ -134,7 +134,7 @@ public final class JsonUtils {
         try{
             double distance_within_meters = jsonObject.has("distance_within_meters")?jsonObject.getDouble("distance_within_meters"):0.0;
             String id = jsonObject.has("id")?jsonObject.getString("id"):"";
-            String address =jsonObject.has("Address")? jsonObject.getString("Address"):"";
+            String address =jsonObject.has("address")? jsonObject.getString("address"):"";
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
 

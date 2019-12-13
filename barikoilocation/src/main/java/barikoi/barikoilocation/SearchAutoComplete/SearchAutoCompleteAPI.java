@@ -56,15 +56,22 @@ public class SearchAutoCompleteAPI {
                     (String response) -> {
                         try {
                             JSONObject data = new JSONObject(response);
-                            JSONArray placearray = data.getJSONArray("places");
+                            if(data.has("status")){
+                                if(data.getInt("status")==200){
+                                    JSONArray placearray = data.getJSONArray("places");
 
-                            if (placearray.length() == 0) {
-                                Log.d(TAG,"Place Not Found");
-                                searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
-                            } else {
-                                ArrayList<SearchAutoCompletePlace> searchPlaces = JsonUtils.getSearchAutoCompletePlaces(placearray);
-                                searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
-                            }
+                                    if (placearray.length() == 0) {
+                                        Log.d(TAG,"Place Not Found");
+                                        searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
+                                    } else {
+                                        ArrayList<SearchAutoCompletePlace> searchPlaces = JsonUtils.getSearchAutoCompletePlaces(placearray);
+                                        searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
+                                    }
+                                }else{
+                                    searchAutoCompleteListener.onFailure(data.getString("message"));
+                                }
+                            }else searchAutoCompleteListener.onFailure(data.getString("message"));
+
                         } catch (JSONException e) {
                             searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
                         }

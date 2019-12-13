@@ -86,15 +86,22 @@ public class NearbyPlaceAPI {
                     (String response) -> {
                         try {
                             JSONObject data=new JSONObject(response);
-                            JSONArray placearray = data.getJSONArray("Place");
+                            if(data.has("status")) {
+                                if (data.getInt("status") == 200) {
+                                    JSONArray placearray = data.getJSONArray("Place");
 
-                            if (placearray.length() == 0) {
-                                Log.d(TAG,"No places Found");
-                                nearbyPlaceListener.onFailure("No places Found");
-                            } else {
-                                ArrayList<NearbyPlace> searchPlaces = JsonUtils.getNearbyPlace(placearray);
-                                nearbyPlaceListener.onPlaceListReceived(searchPlaces);
-                            }
+                                    if (placearray.length() == 0) {
+                                        Log.d(TAG,"No places Found");
+                                        nearbyPlaceListener.onFailure("No places Found");
+                                    } else {
+                                        ArrayList<NearbyPlace> searchPlaces = JsonUtils.getNearbyPlace(placearray);
+                                        nearbyPlaceListener.onPlaceListReceived(searchPlaces);
+                                    }
+                                }else{
+                                    nearbyPlaceListener.onFailure(data.getString("message"));
+                                }
+                            }else  nearbyPlaceListener.onFailure(data.getString("message"));
+
 
                         } catch (JSONException e) {
                             nearbyPlaceListener.onFailure(JsonUtils.logError(TAG,response));

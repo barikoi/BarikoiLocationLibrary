@@ -14,11 +14,9 @@ import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceListener;
-import barikoi.barikoilocation.PlaceModels.GeoCodePlaceModel;
-import barikoi.barikoilocation.PlaceModels.NearbyPlacesByCategoryPlaceModel;
-import barikoi.barikoilocation.PlaceModels.NearbyPlacesModel;
-import barikoi.barikoilocation.PlaceModels.ReverseGeoPlaceModel;
-import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlaceModel;
+import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
+import barikoi.barikoilocation.PlaceModels.NearbyPlace;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.PlaceModels.Place;
@@ -42,14 +40,14 @@ public class MainActivity extends AppCompatActivity  {
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(SearchAutoCompletePlaceModel place) {
+            public void onPlaceSelected(GeoCodePlace place) {
                 Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
                 Log.d("MainActivity",""+place.getAddress());
             }
 
             @Override
             public void onFailure(String error) {
-
+                Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
         reverseGeo.setOnClickListener(new View.OnClickListener() {
@@ -59,15 +57,16 @@ public class MainActivity extends AppCompatActivity  {
                         .setLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
                         .build()
                         .getAddress(new ReverseGeoAPIListener() {
+
                             @Override
-                            public void reversedAddress(ReverseGeoPlaceModel place) {
+                            public void reversedAddress(ReverseGeoPlace place) {
                                 Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
                                 Log.d("ReverseGeoPlace",""+place.getAddress());
                             }
 
                             @Override
                             public void onFailure(String message) {
-
+                                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -83,10 +82,11 @@ public class MainActivity extends AppCompatActivity  {
                             .build()
                             .generateNearbyPlaceListByType(new NearbyPlaceListener() {
                                 @Override
-                                public void onPlaceListReceivedByCategory(ArrayList<NearbyPlacesByCategoryPlaceModel> places) {
+                                public void onPlaceListReceived(ArrayList<NearbyPlace> places) {
                                     Toast.makeText(MainActivity.this, ""+places.get(0).getAddress(), Toast.LENGTH_SHORT).show();
                                     Log.d("Nearby",""+places.size());
                                 }
+
                                 @Override
                                 public void onFailure(String message) {
                                     Toast.makeText(MainActivity.this, "Error: "+message, Toast.LENGTH_SHORT).show();
@@ -101,8 +101,9 @@ public class MainActivity extends AppCompatActivity  {
                       .idOrCode(geo.getText().toString())
                       .build()
                       .generateList(new PlaceGeoCodeListener() {
+
                           @Override
-                          public void onGeoCodePlace(GeoCodePlaceModel place) {
+                          public void onGeoCodePlace(GeoCodePlace place) {
                               Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
                               Log.d("onGeoCodePlace",""+place.getAddress());
                           }

@@ -53,9 +53,18 @@ public class GeoCodeAPI {
                     Api.geoCodeString +this.idOrCode,
                     (String response) -> {
                         try {
-                            JSONObject data = new JSONArray(response).getJSONObject(0);
-                                GeoCodePlace place = JsonUtils.getGeoCodePlace(data);
-                                placeGeoCodeListener.onGeoCodePlace(place);
+                            JSONObject data = new JSONObject(response);
+                            if(data.has("status")) {
+                                if (data.getInt("status") == 200) {
+                                    GeoCodePlace place = JsonUtils.getGeoCodePlace(data.getJSONObject("place"));
+                                    placeGeoCodeListener.onGeoCodePlace(place);
+                                }else{
+                                    placeGeoCodeListener.onFailure(data.getString("message"));
+                                }
+                            }else{
+                                placeGeoCodeListener.onFailure(data.getString("message"));
+                            }
+
                         } catch (JSONException e) {
                             placeGeoCodeListener.onFailure(JsonUtils.logError(TAG,response));
                         }

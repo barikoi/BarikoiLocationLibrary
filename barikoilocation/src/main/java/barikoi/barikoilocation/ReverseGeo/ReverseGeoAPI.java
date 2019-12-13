@@ -69,13 +69,21 @@ public class ReverseGeoAPI {
                             }
                         }
                         try {
-                            JSONObject place= new JSONObject(response).getJSONArray("Place").getJSONObject(0);
-                            ReverseGeoPlace p=JsonUtils.getReverseGeoPlace(place);
-                            if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
-                            else {
-                                Log.d(TAG,"ReverseGeo Listener is null");
-                                reverseGeoAPIListener.onFailure("ReverseGeo Listener is null");
+                            JSONObject responsejson=new JSONObject(response);
+                            if(responsejson.has("status")){
+                                if(responsejson.getInt("status")==200){
+                                    JSONObject place= responsejson.getJSONObject("place");
+                                    ReverseGeoPlace p=JsonUtils.getReverseGeoPlace(place);
+                                    if(p!=null && reverseGeoAPIListener !=null ) reverseGeoAPIListener.reversedAddress(p);
+                                    else {
+                                        Log.d(TAG,"ReverseGeo Listener is null");
+                                        reverseGeoAPIListener.onFailure("ReverseGeo Listener has not been implemented");
+                                    }
+                                }else{
+                                    reverseGeoAPIListener.onFailure(responsejson.getString("message"));
+                                }
                             }
+
                         } catch (JSONException e) {
                             reverseGeoAPIListener.onFailure(JsonUtils.logError(TAG,response));
                         }
