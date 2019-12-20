@@ -19,12 +19,13 @@ import barikoi.barikoilocation.PlaceModels.NearbyPlace;
 import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
-import barikoi.barikoilocation.PlaceModels.Place;
+import barikoi.barikoilocation.Rupantor.RupantorAPI;
+import barikoi.barikoilocation.Rupantor.RupantorPlaceListener;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment;
 
 public class MainActivity extends AppCompatActivity  {
-    Button geoCode,nearby,reverseGeo;
-    EditText lat,lon,geo,type;
+    Button geoCode,nearby,reverseGeo,rupantorSearch;
+    EditText lat,lon,geo,type,rupantorquery;
     SearchAutocompleteFragment searchAutocompleteFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity  {
         lat=findViewById(R.id.lat);
         lon=findViewById(R.id.lon);
         type=findViewById(R.id.type);
+        rupantorquery=findViewById(R.id.rupantor_query);
+        rupantorSearch=findViewById(R.id.rupantor_search);
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
@@ -94,28 +97,42 @@ public class MainActivity extends AppCompatActivity  {
                             });
             }
         });
-      geoCode.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              GeoCodeAPI.builder(getApplicationContext())
-                      .idOrCode(geo.getText().toString())
-                      .build()
-                      .generateList(new PlaceGeoCodeListener() {
+        geoCode.setOnClickListener(view -> GeoCodeAPI.builder(getApplicationContext())
+                .idOrCode(geo.getText().toString())
+                .build()
+                .generateList(new PlaceGeoCodeListener() {
 
-                          @Override
-                          public void onGeoCodePlace(GeoCodePlace place) {
-                              Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
-                              Log.d("onGeoCodePlace",""+place.getAddress());
-                          }
+                    @Override
+                    public void onGeoCodePlace(GeoCodePlace place) {
+                        Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
+                        Log.d("onGeoCodePlace",""+place.getAddress());
+                    }
 
-                          @Override
-                          public void onFailure(String message) {
-                              Toast.makeText(MainActivity.this, ""+ message, Toast.LENGTH_SHORT).show();
-                          }
-                      });
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(MainActivity.this, ""+ message, Toast.LENGTH_SHORT).show();
+                    }
+                }));
+        rupantorSearch.setOnClickListener(view -> {
+            RupantorAPI.builder(this)
+                    .rawAddress(rupantorquery.getText().toString())
+                    .build()
+                    .getRupantorPlace(new RupantorPlaceListener() {
+                        @Override
+                        public void onRupantorPlaceReceived(GeoCodePlace place, String fixedAddress, boolean isCompleteAddress) {
+                            Toast.makeText(MainActivity.this,fixedAddress+"\n"+place.getAddress() , Toast.LENGTH_SHORT).show();
 
-          }
-      });
+                        }
 
+                        @Override
+                        public void onFailure(String messege) {
+                            Toast.makeText(MainActivity.this,messege, Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+        });
     }
+
+
 }

@@ -55,4 +55,23 @@
        android:name="barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment">
    </fragment>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/rupantor_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="input address for rupantorAPI"
+            />
+        <Button
+            android:id="@+id/rupantor_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"/>
+
+    </LinearLayout>
 </LinearLayout>

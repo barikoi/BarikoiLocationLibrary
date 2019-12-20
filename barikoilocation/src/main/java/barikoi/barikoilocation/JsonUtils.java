@@ -96,7 +96,7 @@ public final class JsonUtils {
         try{
             String lon = jsonObject.has("longitude")? jsonObject.getString("longitude"):"";
             String lat = jsonObject.has("latitude")?jsonObject.getString("latitude"):"";
-            String address =jsonObject.has("address")? jsonObject.getString("address"):"";
+            String address =jsonObject.has("address")? jsonObject.getString("address"):jsonObject.has("Address")?jsonObject.getString("Address"):"";
             String code = jsonObject.has("uCode")?jsonObject.getString("uCode"):"";
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
@@ -138,7 +138,7 @@ public final class JsonUtils {
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
 
-            ReverseGeoPlace newplace = new ReverseGeoPlace(id,address, city, area,distance_within_meters);
+            ReverseGeoPlace newplace = new ReverseGeoPlace(id,address, area, city, distance_within_meters);
 
             Log.d("JsonUtils",""+newplace.getAddress());
             return newplace;

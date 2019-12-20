@@ -18,4 +18,5 @@ public class Api {
     public static final String geoCodeString =url_base+"api/search/geocode/"+BarikoiAPI.getAccessToken()+"/place/";
     public static final String nearbyPlacesString =url_base+"api/search/nearby/"+BarikoiAPI.getAccessToken()+"/";
     public static final String nearbyPlacesByTypeString =url_base+"api/search/nearby/category/"+BarikoiAPI.getAccessToken()+"/";
+    public static final String rupantorApiString= url_base+"api/search/"+BarikoiAPI.getAccessToken()+"/rupantor/geocode";
 }
