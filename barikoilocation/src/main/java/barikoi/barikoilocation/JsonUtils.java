@@ -100,7 +100,7 @@ public final class JsonUtils {
             String code = jsonObject.has("uCode")?jsonObject.getString("uCode"):"";
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
-            String postal=jsonObject.has("postCode")? jsonObject.getString("postCode"):"";
+            String postal=jsonObject.has("postcode")? jsonObject.getString("postcode"):"";
             String pType=jsonObject.has("pType")? jsonObject.getString("pType"):"";
             String subType=jsonObject.has("subType")? jsonObject.getString("subType"):"";
             String route=jsonObject.has("route_description")? jsonObject.getString("route_description"):"";
