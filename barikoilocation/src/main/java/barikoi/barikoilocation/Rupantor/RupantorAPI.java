@@ -60,8 +60,10 @@ public class RupantorAPI {
                                     }else {
                                         GeoCodePlace place = JsonUtils.getGeoCodePlace(data.getJSONObject("geocoded_address"));
                                         String fixedAddress = data.getString("fixed_address");
+                                        String score = data.getString("confidence_score_percentage");
                                         boolean iscompleteAddress = data.getString("address_status").equals("complete");
                                         rupantorPlaceListener.onRupantorPlaceReceived(place, fixedAddress, iscompleteAddress);
+                                        rupantorPlaceListener.onRupantorPlaceReceivedWithScore(place,fixedAddress, iscompleteAddress, score);
                                     }
                                 }else{
                                     rupantorPlaceListener.onFailure(data.getString("message"));

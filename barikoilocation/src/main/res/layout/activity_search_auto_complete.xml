@@ -11,19 +11,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:orientation="horizontal">
+
+        android:orientation="vertical"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/border">
 
             <EditText
                 android:id="@+id/barikoiEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:drawableRight="@drawable/clearitems"
+                android:drawableRight="@drawable/ic_close"
+                android:drawableLeft="@drawable/ic_back"
+                android:drawableTint="@android:color/darker_gray"
                 android:drawablePadding="5dp"
                 android:ellipsize="end"
                 android:focusable="true"
@@ -49,6 +55,8 @@
 
         </RelativeLayout>
 
+
+
     </LinearLayout>
 
     <TextView
@@ -61,6 +69,26 @@
         android:text="Powered By Barikoi"
         android:textColor="@color/colorBarikoi"
         android:textSize="12sp" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvSuggestions"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:drawablePadding="5dp"-->
+<!--        android:textColor="@color/colorTextGray"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="normal"-->
+<!--        android:layout_marginLeft="12dp"-->
+<!--        android:layout_marginRight="12dp">-->
+
+<!--    </TextView>-->
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:layout_marginLeft="8dp"-->
+<!--        android:layout_marginRight="8dp"-->
+<!--        android:layout_marginTop="2dp"-->
+<!--        android:background="@color/materialcolorgrey100" />-->
 
     <LinearLayout
         android:id="@+id/linearLayoutAdapter"

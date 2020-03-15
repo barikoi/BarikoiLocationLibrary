@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
@@ -39,6 +40,8 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private PlaceSearchAdapter placeAdapter;
     private EditText editTextSearchAutoComplete;
     private ProgressBar progressBar;
+    private String suggestText;
+    private TextView textV;
     private final static String JSONErrorMessage="not found";
     private final static String TAG="SearchACActivity";
     private static final int AUTOCOMPLETE_DELAY = 300;
@@ -55,6 +58,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_LEFT = 0;
                 if(event.getAction() == MotionEvent.ACTION_UP && progressBar.getVisibility()!=View.VISIBLE) {
                     if(editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT]!=null)
                         if(event.getRawX() >= (editTextSearchAutoComplete.getRight() - editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
@@ -63,6 +67,11 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                             placeAdapter.notifyDataSetChanged();
                             return true;
                         }
+                }
+
+                if(event.getRawX() <= (editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())) {
+                    onBackPressed();
+                    return true;
                 }
                 return false;
             }
@@ -75,17 +84,19 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 listView.emptyshow(false);
-                editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
                 progressBar.setVisibility(View.VISIBLE);
                 if(charSequence.length()>=2){
                     queue.cancelAll("search");
                     mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
+                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
                     final Message msg = Message.obtain(mHandler, MESSAGE_TEXT_CHANGED, charSequence.toString());
                     mHandler.sendMessageDelayed(msg, AUTOCOMPLETE_DELAY);
 
                 }
                 else {
                     progressBar.setVisibility(View.GONE);
+                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,R.drawable.ic_close,0);
                     queue.cancelAll("search");
                     items.clear();
                     placeAdapter.notifyDataSetChanged();
@@ -93,6 +104,20 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+
+//                suggestText = editable.toString();
+//                textV = findViewById(R.id.tvSuggestions);
+//                textV.setText(suggestText);
+//                textV.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//
+//                    }
+//                });
+
+
+
             }
         });
     }
@@ -125,10 +150,9 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                             }
                             @Override
                             public void onFailure(String message) {
-                                Log.d(TAG,message);
+                                Log.d(TAG, message);
                             }
                         });
-
             }
 
         });
@@ -141,8 +165,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MESSAGE_TEXT_CHANGED) {
-                String enteredText = (String)msg
-                        .obj;
+                String enteredText = (String)msg.obj;
                 items.clear();
                 placeAdapter.notifyDataSetChanged();
                 queue.cancelAll("search");
@@ -156,8 +179,12 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     items.addAll(places);
                                     placeAdapter.notifyDataSetChanged();
+                                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,R.drawable.ic_close,0);
                                 }
-                                else listView.emptyshow(true);
+                                else {
+                                    listView.emptyshow(true);
+                                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,R.drawable.ic_close,0);
+                                }
                             }
                             @Override
                             public void onFailure(String message) {
@@ -167,10 +194,13 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                 }
                                 else{
                                     progressBar.setVisibility(View.GONE);
-                                    listView.nonetshow(true);
+                                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,R.drawable.ic_close,0);
+                                    //listView.nonetshow(true);
+                                    listView.emptyshow(true);
                                 }
                             }
                         });
+
             }
         }
     };

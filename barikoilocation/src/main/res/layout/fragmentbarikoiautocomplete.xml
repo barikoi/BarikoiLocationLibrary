@@ -2,7 +2,10 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border">
+        android:background="@drawable/border"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp">
 
         <EditText
             android:id="@+id/barikoiEditText"
@@ -14,7 +17,8 @@
             android:layout_marginEnd="2dp"
             android:layout_marginRight="2dp"
             android:background="@android:color/transparent"
-            android:drawableRight="@drawable/deletebutton"
+            android:drawableRight="@drawable/ic_close"
+            android:drawableTint="@android:color/darker_gray"
             android:drawablePadding="5dp"
             android:ellipsize="end"
             android:focusable="false"

@@ -125,6 +125,11 @@ public class MainActivity extends AppCompatActivity  {
                         }
 
                         @Override
+                        public void onRupantorPlaceReceivedWithScore(GeoCodePlace place, String fixedAddress, boolean isCompleteAddress, String confidenceScore) {
+                            //Toast.makeText(MainActivity.this,confidenceScore+"\n"+place.getAddress() , Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
                         public void onFailure(String messege) {
                             Toast.makeText(MainActivity.this,messege, Toast.LENGTH_SHORT).show();
 
