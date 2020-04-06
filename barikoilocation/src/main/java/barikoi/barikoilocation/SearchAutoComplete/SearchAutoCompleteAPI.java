@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
+import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
 import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
@@ -26,14 +27,18 @@ public class SearchAutoCompleteAPI {
     private static final String TAG="SearchAutoCompleteApi";
     Context context;
     String nameOrCode;
+    private Double latitude;
+    private Double longitude;
     /**
      * This constructor sets the context of application and a SearchAutoComplete listener
      * @param context is the application context
 
      */
-    private SearchAutoCompleteAPI(Context context,String nameOrCode){
+    private SearchAutoCompleteAPI(Context context,String nameOrCode, Double latitude,Double longitude){
         this.context=context;
         this.nameOrCode=nameOrCode;
+        this.latitude=latitude;
+        this.longitude=longitude;
     }
     /**
      * This method builds the Builder of this class
@@ -50,7 +55,43 @@ public class SearchAutoCompleteAPI {
     public void generateList(SearchAutoCompleteListener searchAutoCompleteListener) {
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
-        if (this.nameOrCode.length() > 0) {
+        Log.d("SearchAC", "LATLNG: " +this.latitude+ ", " +this.longitude);
+        if (this.nameOrCode.length() > 0 && this.latitude > 0 && this.longitude > 0) {
+            Log.d("SearchAC", "not null Search");
+            StringRequest request = new StringRequest(Request.Method.GET,
+                    Api.autoCompleteString +"?q="+this.nameOrCode+"&latitude="+this.latitude+"&longitude="+this.longitude,
+                    (String response) -> {
+                        try {
+                            JSONObject data = new JSONObject(response);
+                            if(data.has("status")){
+                                if(data.getInt("status")==200){
+                                    JSONArray placearray = data.getJSONArray("places");
+
+                                    if (placearray.length() == 0) {
+                                        Log.d(TAG,"Place Not Found");
+                                        searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
+                                    } else {
+                                        ArrayList<SearchAutoCompletePlace> searchPlaces = JsonUtils.getSearchAutoCompletePlaces(placearray);
+                                        searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
+                                    }
+                                }else{
+                                    searchAutoCompleteListener.onFailure(data.getString("message"));
+                                }
+                            }else searchAutoCompleteListener.onFailure(data.getString("message"));
+
+                        } catch (JSONException e) {
+                            searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
+                        }
+                    },
+                    error ->{
+                        Log.d(TAG,JsonUtils.handleResponse(error));
+                        searchAutoCompleteListener.onFailure(JsonUtils.handleResponse(error));
+                    }){
+            };
+            request.setTag("search");
+            queue.add(request);
+        }else{
+            Log.d("SearchAC", "null Search");
             StringRequest request = new StringRequest(Request.Method.GET,
                     Api.autoCompleteString +"?q="+this.nameOrCode,
                     (String response) -> {
@@ -94,6 +135,8 @@ public class SearchAutoCompleteAPI {
     public static final class Builder{
         private Context context;
         private String nameOrCode="";
+        Double latitude=0.0;
+        Double longitude=0.0;
 
         /**
          * Private constructor for initializing the raw SearchAutoComplete.Builder
@@ -109,6 +152,12 @@ public class SearchAutoCompleteAPI {
             this.nameOrCode=nameOrCode;
             return this;
         }
+
+        public Builder setLatLng(Double latitude, Double longitude){
+            this.latitude=latitude;
+            this.longitude=longitude;
+            return this;
+        }
         /**
          * This uses the provided parameters set using the {@link Builder} and adds the required
          * settings for search Autocomplete to work correctly.
@@ -116,7 +165,7 @@ public class SearchAutoCompleteAPI {
          * @return a new instance of Search Autocomplete
          */
         public SearchAutoCompleteAPI build(){
-            SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this.context,this.nameOrCode);
+            SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this.context,this.nameOrCode, this.latitude,this.longitude);
             return searchAutoCompleteAPI;
         }
     }
