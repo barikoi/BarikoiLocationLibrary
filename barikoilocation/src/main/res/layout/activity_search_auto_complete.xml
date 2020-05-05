@@ -55,15 +55,6 @@
 
         </RelativeLayout>
 
-        <CheckBox
-            android:id="@+id/locationChecked"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginRight="8dp">
-
-        </CheckBox>
-
 
     </LinearLayout>
 
@@ -154,7 +145,7 @@
             android:padding="2dp"
             android:scrollbars="none"
             android:visibility="gone"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listItem="@layout/nearby_place_item" />
     </LinearLayout>
 

@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="4dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/border"
+    android:weightSum="2"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp">
+        android:layout_height="match_parent"
+        android:layout_weight="2">
 
         <EditText
             android:id="@+id/barikoiEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginRight="2dp"
             android:background="@android:color/transparent"
             android:drawableRight="@drawable/ic_close"
             android:drawableTint="@android:color/darker_gray"
             android:drawablePadding="5dp"
             android:ellipsize="end"
-            android:focusable="false"
+            android:focusable="true"
             android:gravity="center|fill"
             android:hint="@string/address"
             android:imeOptions="actionDone"
             android:maxLines="1"
-            android:singleLine="true"
-            android:transitionName="autocomplete"
-            android:layout_marginBottom="2dp"
-            android:padding="8dp" />
+            android:padding="12dp"
+            android:singleLine="true" />
 
-     <!--   <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleInverse"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true" />-->
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progressBar"-->
+<!--            style="?android:attr/progressBarStyleInverse"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="28dp"-->
+<!--            android:layout_alignEnd="@+id/barikoiEditText"-->
+<!--            android:layout_alignRight="@+id/barikoiEditText"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="11dp"-->
+<!--            android:layout_marginEnd="2dp"-->
+<!--            android:layout_marginRight="2dp"-->
+<!--            android:foregroundGravity="center_vertical" />-->
+
     </RelativeLayout>
+
+
+</LinearLayout>

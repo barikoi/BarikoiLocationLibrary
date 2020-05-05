@@ -26,7 +26,7 @@ import barikoi.barikoilocation.RequestQueueSingleton;
 public class SearchAutoCompleteAPI {
     private static final String TAG="SearchAutoCompleteApi";
     Context context;
-    String nameOrCode;
+    String nameOrCode, params;
     private Double latitude;
     private Double longitude;
     /**
@@ -53,47 +53,18 @@ public class SearchAutoCompleteAPI {
      *  requests the server to get info about the given place name
      */
     public void generateList(SearchAutoCompleteListener searchAutoCompleteListener) {
+        if(this.latitude > 0 && this.longitude > 0){
+            params = "?q="+nameOrCode+"&latitude="+this.latitude+"&longitude="+this.longitude;
+        }else {
+            params = "?q="+nameOrCode;
+        }
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
         Log.d("SearchAC", "LATLNG: " +this.latitude+ ", " +this.longitude);
-        if (this.nameOrCode.length() > 0 && this.latitude > 0 && this.longitude > 0) {
+        if (this.nameOrCode.length() > 0) {
             Log.d("SearchAC", "not null Search");
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.autoCompleteString +"?q="+this.nameOrCode+"&latitude="+this.latitude+"&longitude="+this.longitude,
-                    (String response) -> {
-                        try {
-                            JSONObject data = new JSONObject(response);
-                            if(data.has("status")){
-                                if(data.getInt("status")==200){
-                                    JSONArray placearray = data.getJSONArray("places");
-
-                                    if (placearray.length() == 0) {
-                                        Log.d(TAG,"Place Not Found");
-                                        searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
-                                    } else {
-                                        ArrayList<SearchAutoCompletePlace> searchPlaces = JsonUtils.getSearchAutoCompletePlaces(placearray);
-                                        searchAutoCompleteListener.onPlaceListReceived(searchPlaces);
-                                    }
-                                }else{
-                                    searchAutoCompleteListener.onFailure(data.getString("message"));
-                                }
-                            }else searchAutoCompleteListener.onFailure(data.getString("message"));
-
-                        } catch (JSONException e) {
-                            searchAutoCompleteListener.onFailure(JsonUtils.logError(TAG,response));
-                        }
-                    },
-                    error ->{
-                        Log.d(TAG,JsonUtils.handleResponse(error));
-                        searchAutoCompleteListener.onFailure(JsonUtils.handleResponse(error));
-                    }){
-            };
-            request.setTag("search");
-            queue.add(request);
-        }else{
-            Log.d("SearchAC", "null Search");
-            StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.autoCompleteString +"?q="+this.nameOrCode,
+                    Api.autoCompleteString +params,
                     (String response) -> {
                         try {
                             JSONObject data = new JSONObject(response);

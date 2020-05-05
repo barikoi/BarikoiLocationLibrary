@@ -1,6 +1,6 @@
 package barikoi.barikoilocation.library;
 
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,8 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AppCompatActivity;
 import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
@@ -23,10 +26,11 @@ import barikoi.barikoilocation.Rupantor.RupantorAPI;
 import barikoi.barikoilocation.Rupantor.RupantorPlaceListener;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     Button geoCode,nearby,reverseGeo,rupantorSearch;
     EditText lat,lon,geo,type,rupantorquery;
     SearchAutocompleteFragment searchAutocompleteFragment;
+    FirebaseAnalytics firebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +44,12 @@ public class MainActivity extends AppCompatActivity  {
         type=findViewById(R.id.type);
         rupantorquery=findViewById(R.id.rupantor_query);
         rupantorSearch=findViewById(R.id.rupantor_search);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        //search with geoLocation
+        searchAutocompleteFragment.setNearbySearch(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()));
+
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(GeoCodePlace place) {
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity  {
                 Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
+
+
         reverseGeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

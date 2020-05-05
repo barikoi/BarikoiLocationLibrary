@@ -3,15 +3,16 @@ package barikoi.barikoilocation.SearchAutoComplete;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
 import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.R;
@@ -20,10 +21,11 @@ import barikoi.barikoilocation.R;
  * This is the autocomplete search ui for developers
  * this ui can be used as a view component in any activity
  */
-public class SearchAutocompleteFragment extends Fragment{
+public class SearchAutocompleteFragment extends Fragment {
     private static final String TAG="SearchACFragment";
     private static final int requestCode=555;
     private PlaceSelectionListener placeSelectionListener;
+    private Double latitude, longitude;
     GeoCodePlace place;
     EditText barikoiEditText;
     @Override
@@ -36,14 +38,32 @@ public class SearchAutocompleteFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         barikoiEditText=view.findViewById(R.id.barikoiEditText);
-        barikoiEditText.setOnClickListener(new View.OnClickListener() {
+
+//        barikoiEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                barikoiEditText.setText(getContext().getText(R.string.address));
+//                Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
+//                startActivityForResult(intent,requestCode);
+//            }
+//        });
+
+        barikoiEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
                 barikoiEditText.setText(getContext().getText(R.string.address));
                 Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
                 startActivityForResult(intent,requestCode);
+                return true;
             }
         });
+    }
+
+    public void setNearbySearch(Double latitude, Double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public void setPlaceSelectionListener(PlaceSelectionListener placeSelectionListener){

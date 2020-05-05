@@ -12,8 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,6 +32,7 @@ import com.android.volley.RequestQueue;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AppCompatActivity;
 import barikoi.barikoilocation.GeoCode.GeoCodeAPI;
 import barikoi.barikoilocation.GeoCode.PlaceGeoCodeListener;
 import barikoi.barikoilocation.GetLocationTask;
@@ -54,13 +55,12 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private String suggestText;
     private TextView textV;
-    private CheckBox locationChecked;
     private final static String JSONErrorMessage="not found";
     private final static String TAG="SearchACActivity";
     private static final int AUTOCOMPLETE_DELAY = 300;
     private static final int MESSAGE_TEXT_CHANGED = 0;
 
-    Double latitude, longitude;
+    Double latitude = 0.0, longitude = 0.0;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -70,7 +70,16 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         init();
         progressBar=findViewById(R.id.progressBarSearchPlace);
         progressBar.setVisibility(View.GONE);
-        locationChecked = findViewById(R.id.locationChecked);
+
+        if(getIntent().getDoubleExtra("latitude", 0.0) > 0){
+
+            latitude = getIntent().getDoubleExtra("latitude", 0.0);
+        }
+
+        if(getIntent().getDoubleExtra("longitude", 0.0) > 0){
+
+            longitude = getIntent().getDoubleExtra("longitude", 0.0);
+        }
 
 
         editTextSearchAutoComplete.setOnTouchListener(new View.OnTouchListener() {
@@ -107,14 +116,6 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 if(charSequence.length()>=2){
 
-                    if (locationChecked.isChecked()) {
-                        GetLocationTask getLoc = new GetLocationTask(SearchAutoCompleteActivity.this);
-                        if (getLoc.getIsGPSTrackingEnabled()){
-                            latitude= getLoc.getLatitude();
-                            longitude = getLoc.getLongitude();
-                        }
-                        getLoc.displayLocation();
-                    }
                     queue.cancelAll("search");
                     mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
                     editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
@@ -197,8 +198,6 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                 items.clear();
                 placeAdapter.notifyDataSetChanged();
                 queue.cancelAll("search");
-                if (locationChecked.isChecked()) {
-                    Log.d(TAG, "ischecked");
                     SearchAutoCompleteAPI.builder(getApplicationContext())
                             .nameOrCode(enteredText)
                             .setLatLng(latitude, longitude)
@@ -230,39 +229,6 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                }else {
-                    Log.d(TAG, "else ischecked");
-                    SearchAutoCompleteAPI.builder(getApplicationContext())
-                            .nameOrCode(enteredText)
-                            .build()
-                            .generateList(new SearchAutoCompleteListener() {
-                                @Override
-                                public void onPlaceListReceived(ArrayList<SearchAutoCompletePlace> places) {
-                                    if (places.size() > 0) {
-                                        progressBar.setVisibility(View.GONE);
-                                        items.addAll(places);
-                                        placeAdapter.notifyDataSetChanged();
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                    } else {
-                                        listView.emptyshow(true);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(String message) {
-                                    if (message.equals(JSONErrorMessage)) {
-                                        progressBar.setVisibility(View.GONE);
-                                        listView.emptyshow(true);
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                        //listView.nonetshow(true);
-                                        listView.emptyshow(true);
-                                    }
-                                }
-                            });
-                }
 
             }
         }
