@@ -48,15 +48,31 @@ public class SearchAutocompleteFragment extends Fragment {
 //            }
 //        });
 
+//        barikoiEditText.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                barikoiEditText.setText(getContext().getText(R.string.address));
+//                Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
+//                intent.putExtra("latitude", latitude);
+//                intent.putExtra("longitude", longitude);
+//                startActivityForResult(intent,requestCode);
+//                return true;
+//            }
+//        });
+
         barikoiEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                barikoiEditText.setText(getContext().getText(R.string.address));
-                Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
-                intent.putExtra("latitude", latitude);
-                intent.putExtra("longitude", longitude);
-                startActivityForResult(intent,requestCode);
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_UP){
+
+                    barikoiEditText.setText(getContext().getText(R.string.address));
+                    Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
+                    intent.putExtra("latitude", latitude);
+                    intent.putExtra("longitude", longitude);
+                    startActivityForResult(intent,requestCode);
+                    return true;
+                }
+                return false;
             }
         });
     }

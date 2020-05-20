@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.provider.Settings;
@@ -52,6 +53,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private RecyclerViewEmptySupport listView;
     private PlaceSearchAdapter placeAdapter;
     private EditText editTextSearchAutoComplete;
+    private ImageView imageBack, imageClose;
     private ProgressBar progressBar;
     private String suggestText;
     private TextView textV;
@@ -70,6 +72,8 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         init();
         progressBar=findViewById(R.id.progressBarSearchPlace);
         progressBar.setVisibility(View.GONE);
+		imageBack = findViewById(R.id.imageBack);
+		imageClose = findViewById(R.id.imgClose);
 
         if(getIntent().getDoubleExtra("latitude", 0.0) > 0){
 
@@ -81,29 +85,44 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             longitude = getIntent().getDoubleExtra("longitude", 0.0);
         }
 
+		imageBack.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				onBackPressed();
+			}
+		});
 
-        editTextSearchAutoComplete.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_LEFT = 0;
-                if(event.getAction() == MotionEvent.ACTION_UP && progressBar.getVisibility()!=View.VISIBLE) {
-                    if(editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT]!=null)
-                        if(event.getRawX() >= (editTextSearchAutoComplete.getRight() - editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                            editTextSearchAutoComplete.setText("");
-                            items.clear();
-                            placeAdapter.notifyDataSetChanged();
-                            return true;
-                        }
-                }
+		imageClose.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				editTextSearchAutoComplete.setText("");
+				items.clear();
+				placeAdapter.notifyDataSetChanged();
+			}
+		});
 
-                if(event.getRawX() <= (editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())) {
-                    onBackPressed();
-                    return true;
-                }
-                return false;
-            }
-        });
+//        editTextSearchAutoComplete.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final int DRAWABLE_RIGHT = 2;
+//                final int DRAWABLE_LEFT = 0;
+//                if(event.getAction() == MotionEvent.ACTION_UP && progressBar.getVisibility()!=View.VISIBLE) {
+//                    if(editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT]!=null)
+//                        if(event.getRawX() >= (editTextSearchAutoComplete.getRight() - editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+//                            editTextSearchAutoComplete.setText("");
+//                            items.clear();
+//                            placeAdapter.notifyDataSetChanged();
+//                            return true;
+//                        }
+//                }
+//
+//                if(event.getRawX() <= (editTextSearchAutoComplete.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())) {
+//                    onBackPressed();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
         editTextSearchAutoComplete.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -112,21 +131,25 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 listView.emptyshow(false);
-                editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
+                //editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
                 progressBar.setVisibility(View.VISIBLE);
                 if(charSequence.length()>=2){
 
                     queue.cancelAll("search");
                     mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
-                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
-                    final Message msg = Message.obtain(mHandler, MESSAGE_TEXT_CHANGED, charSequence.toString());
+                    //editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
+					imageBack.setVisibility(View.VISIBLE);
+					imageClose.setVisibility(View.GONE);
+					final Message msg = Message.obtain(mHandler, MESSAGE_TEXT_CHANGED, charSequence.toString());
                     mHandler.sendMessageDelayed(msg, AUTOCOMPLETE_DELAY);
 
                 }
                 else {
                     progressBar.setVisibility(View.GONE);
-                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,R.drawable.ic_close,0);
-                    queue.cancelAll("search");
+                    //editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,R.drawable.ic_close,0);
+					imageBack.setVisibility(View.VISIBLE);
+					imageClose.setVisibility(View.VISIBLE);
+					queue.cancelAll("search");
                     items.clear();
                     placeAdapter.notifyDataSetChanged();
                 }
@@ -172,6 +195,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                         .generateList(new PlaceGeoCodeListener() {
                             @Override
                             public void onGeoCodePlace(GeoCodePlace place) {
+                            	Log.d("Search", "ReturnIntent");
                                 Intent returnIntent = getIntent();
                                 returnIntent.putExtra("place_selected",place);
                                 setResult(Activity.RESULT_OK,returnIntent);
@@ -209,10 +233,14 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                         progressBar.setVisibility(View.GONE);
                                         items.addAll(places);
                                         placeAdapter.notifyDataSetChanged();
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+                                        //editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+										imageBack.setVisibility(View.VISIBLE);
+										imageClose.setVisibility(View.VISIBLE);
                                     } else {
                                         listView.emptyshow(true);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+                                        //editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+										imageBack.setVisibility(View.VISIBLE);
+										imageClose.setVisibility(View.VISIBLE);
                                     }
                                 }
 
@@ -221,13 +249,17 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                     if (message.equals(JSONErrorMessage)) {
                                         progressBar.setVisibility(View.GONE);
                                         listView.emptyshow(true);
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                        //listView.nonetshow(true);
-                                        listView.emptyshow(true);
                                     }
-                                }
+									else {
+										progressBar.setVisibility(View.GONE);
+										//editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+										imageBack.setVisibility(View.VISIBLE);
+										imageClose.setVisibility(View.VISIBLE);
+										//listView.nonetshow(true);
+										listView.emptyshow(true);
+									}
+
+								}
                             });
 
             }

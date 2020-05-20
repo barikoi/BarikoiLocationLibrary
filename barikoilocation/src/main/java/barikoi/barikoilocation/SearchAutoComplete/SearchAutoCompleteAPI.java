@@ -54,9 +54,9 @@ public class SearchAutoCompleteAPI {
      */
     public void generateList(SearchAutoCompleteListener searchAutoCompleteListener) {
         if(this.latitude > 0 && this.longitude > 0){
-            params = "?q="+nameOrCode+"&latitude="+this.latitude+"&longitude="+this.longitude;
+            params = "?q="+this.nameOrCode+"&latitude="+this.latitude+"&longitude="+this.longitude;
         }else {
-            params = "?q="+nameOrCode;
+            params = "?q="+this.nameOrCode;
         }
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
@@ -64,7 +64,7 @@ public class SearchAutoCompleteAPI {
         if (this.nameOrCode.length() > 0) {
             Log.d("SearchAC", "not null Search");
             StringRequest request = new StringRequest(Request.Method.GET,
-                    Api.autoCompleteString +params,
+                    Api.autoCompleteString +this.params,
                     (String response) -> {
                         try {
                             JSONObject data = new JSONObject(response);
@@ -106,8 +106,8 @@ public class SearchAutoCompleteAPI {
     public static final class Builder{
         private Context context;
         private String nameOrCode="";
-        Double latitude=0.0;
-        Double longitude=0.0;
+        private Double latitude=0.0;
+        private Double longitude=0.0;
 
         /**
          * Private constructor for initializing the raw SearchAutoComplete.Builder

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:drawableRight="@drawable/ic_close"
-            android:drawableTint="@android:color/darker_gray"
+            android:drawableTint="@color/defaultGray"
             android:drawablePadding="5dp"
             android:ellipsize="end"
             android:focusable="true"
