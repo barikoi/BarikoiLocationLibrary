@@ -153,7 +153,7 @@
             android:padding="2dp"
             android:scrollbars="none"
             android:visibility="gone"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listItem="@layout/nearby_place_item" />
     </LinearLayout>
 

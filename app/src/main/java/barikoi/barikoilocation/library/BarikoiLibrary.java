@@ -8,6 +8,6 @@ public class BarikoiLibrary extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BarikoiAPI.getINSTANCE(this,"MTExMTpKQkZZMzNIQk45");
+        BarikoiAPI.getINSTANCE(this,"BARIKOI_API_KEY_HERE");
     }
 }

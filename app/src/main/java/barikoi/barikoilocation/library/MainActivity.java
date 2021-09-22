@@ -1,12 +1,14 @@
 package barikoi.barikoilocation.library;
 
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,7 @@ import barikoi.barikoilocation.Rupantor.RupantorAPI;
 import barikoi.barikoilocation.Rupantor.RupantorPlaceListener;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutocompleteFragment;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     Button geoCode,nearby,reverseGeo,rupantorSearch;
     EditText lat,lon,geo,type,rupantorquery;
     SearchAutocompleteFragment searchAutocompleteFragment;

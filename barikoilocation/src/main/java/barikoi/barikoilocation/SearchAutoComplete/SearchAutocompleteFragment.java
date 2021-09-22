@@ -3,14 +3,16 @@ package barikoi.barikoilocation.SearchAutoComplete;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
 import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
@@ -20,7 +22,7 @@ import barikoi.barikoilocation.R;
  * This is the autocomplete search ui for developers
  * this ui can be used as a view component in any activity
  */
-public class SearchAutocompleteFragment extends Fragment{
+public class SearchAutocompleteFragment extends Fragment {
     private static final String TAG="SearchACFragment";
     private static final int requestCode=555;
     private PlaceSelectionListener placeSelectionListener;
