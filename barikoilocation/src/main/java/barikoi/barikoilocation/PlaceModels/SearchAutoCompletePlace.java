@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class SearchAutoCompletePlace implements Serializable {
     protected String id, address,code,area;
+    protected double longitude, latitude;
 
     public SearchAutoCompletePlace(){}
 
@@ -12,6 +13,15 @@ public class SearchAutoCompletePlace implements Serializable {
         this.address=address;
         this.code=code;
         this.area=area;
+    }
+
+    public SearchAutoCompletePlace(String id, String address, String code, String area, double longitude, double latitude){
+        this.id=id;
+        this.address=address;
+        this.code=code;
+        this.area=area;
+        this.longitude=longitude;
+        this.latitude=latitude;
     }
 
     public void setId(String id){
@@ -43,6 +53,22 @@ public class SearchAutoCompletePlace implements Serializable {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     @Override

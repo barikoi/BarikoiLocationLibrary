@@ -17,6 +17,7 @@ import barikoi.barikoilocation.NearbyPlace.NearbyPlaceListener;
 import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
 import barikoi.barikoilocation.PlaceModels.NearbyPlace;
 import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
+import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPIListener;
 import barikoi.barikoilocation.Rupantor.RupantorAPI;
@@ -43,8 +44,8 @@ public class MainActivity extends AppCompatActivity  {
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(GeoCodePlace place) {
-                Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
+            public void onPlaceSelected(SearchAutoCompletePlace place) {
+                Toast.makeText(MainActivity.this, ""+place.getAddress()+ " \n lat: "+ place.getLatitude()+"\nlon: "+place.getLongitude() , Toast.LENGTH_SHORT).show();
                 Log.d("MainActivity",""+place.getAddress());
             }
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity  {
                 Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
+        searchAutocompleteFragment.setTextHint("search for a place");
         reverseGeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

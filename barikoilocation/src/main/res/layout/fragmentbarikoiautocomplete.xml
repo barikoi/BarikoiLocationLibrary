@@ -23,7 +23,6 @@
             android:ellipsize="end"
             android:focusable="false"
             android:gravity="center|fill"
-            android:hint="@string/address"
             android:imeOptions="actionDone"
             android:maxLines="1"
             android:singleLine="true"

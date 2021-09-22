@@ -24,7 +24,7 @@ public class SearchAutocompleteFragment extends Fragment{
     private static final String TAG="SearchACFragment";
     private static final int requestCode=555;
     private PlaceSelectionListener placeSelectionListener;
-    GeoCodePlace place;
+    SearchAutoCompletePlace place;
     EditText barikoiEditText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,13 +39,16 @@ public class SearchAutocompleteFragment extends Fragment{
         barikoiEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                barikoiEditText.setText(getContext().getText(R.string.address));
                 Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
                 startActivityForResult(intent,requestCode);
             }
         });
     }
 
+    public void setTextHint(String str){
+        barikoiEditText=getView().findViewById(R.id.barikoiEditText);
+        barikoiEditText.setHint(str);
+    }
     public void setPlaceSelectionListener(PlaceSelectionListener placeSelectionListener){
       try{
           this.placeSelectionListener = placeSelectionListener;
@@ -53,7 +56,7 @@ public class SearchAutocompleteFragment extends Fragment{
       catch (Exception e){}
     }
     public interface PlaceSelectionListener {
-        void onPlaceSelected(GeoCodePlace place);
+        void onPlaceSelected(SearchAutoCompletePlace place);
         void onFailure(String error);
     }
 
@@ -62,7 +65,7 @@ public class SearchAutocompleteFragment extends Fragment{
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == this.requestCode) {
             if(resultCode == Activity.RESULT_OK){
-                place= (GeoCodePlace) data.getSerializableExtra("place_selected");
+                place= (SearchAutoCompletePlace) data.getSerializableExtra("place_selected");
                 barikoiEditText.setText(place.toString());
                 try {
                     this.placeSelectionListener.onPlaceSelected(this.place);

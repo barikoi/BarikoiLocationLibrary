@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class GeoCodePlace extends SearchAutoCompletePlace implements Serializable {
 
-    private String latitude,longitude,type,subType,city,postalcode, route_description, imglink;
+    private String type,subType,city,postalcode, route_description, imglink;
 
     public GeoCodePlace(){}
 
-    public GeoCodePlace(String address, String lon, String lat, String code, String city, String area, String postalcode, String type, String subType ){
+    public GeoCodePlace(String address, double lon, double lat, String code, String city, String area, String postalcode, String type, String subType ){
         this.address=address;
         this.latitude=lat;
         this.longitude=lon;
@@ -62,19 +62,19 @@ public class GeoCodePlace extends SearchAutoCompletePlace implements Serializabl
         return str;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

@@ -43,8 +43,8 @@ public final class JsonUtils {
 
                 String id = jsonObject.has("id")? jsonObject.getString("id"):"";
                 double distance_within_meters = jsonObject.has("distance_within_meters")?jsonObject.getDouble("distance_within_meters"):0.0;
-                String lon = jsonObject.has("longitude")? jsonObject.getString("longitude"):"";
-                String lat = jsonObject.has("latitude")?jsonObject.getString("latitude"):"";
+                double lon = jsonObject.has("longitude")? jsonObject.getDouble("longitude"):null;
+                double lat = jsonObject.has("latitude")?jsonObject.getDouble("latitude"):null;
                 String address =jsonObject.has("Address")? jsonObject.getString("Address"):"";
                 String city=jsonObject.has("city")? jsonObject.getString("city"):"";
                 String code = jsonObject.has("uCode")?jsonObject.getString("uCode"):"";
@@ -77,8 +77,10 @@ public final class JsonUtils {
                 String address =report.has("address")? report.getString("address"):"";
                 String code = report.has("uCode")?report.getString("uCode"):"";
                 String area=report.has("area")? report.getString("area"):"";
+                double lon = Double.parseDouble(report.has("longitude")? report.getString("longitude"):"");
+                double lat = Double.parseDouble(report.has("latitude")?report.getString("latitude"):"");
 
-                SearchAutoCompletePlace newplace = new SearchAutoCompletePlace(id,address, code, area);
+                SearchAutoCompletePlace newplace = new SearchAutoCompletePlace(id,address, code, area,lon,lat);
                 newplaces.add(newplace);
             }
         }catch (Exception e){
@@ -94,8 +96,8 @@ public final class JsonUtils {
      */
     public static GeoCodePlace getGeoCodePlace(JSONObject jsonObject){
         try{
-            String lon = jsonObject.has("longitude")? jsonObject.getString("longitude"):"";
-            String lat = jsonObject.has("latitude")?jsonObject.getString("latitude"):"";
+            double lon = jsonObject.has("longitude")? jsonObject.getDouble("longitude"):null;
+            double lat = jsonObject.has("latitude")?jsonObject.getDouble("latitude"):null;
             String address =jsonObject.has("address")? jsonObject.getString("address"):jsonObject.has("Address")?jsonObject.getString("Address"):"";
             String code = jsonObject.has("uCode")?jsonObject.getString("uCode"):"";
             String area=jsonObject.has("area")? jsonObject.getString("area"):"";

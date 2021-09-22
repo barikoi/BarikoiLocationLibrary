@@ -3,9 +3,9 @@ package barikoi.barikoilocation.PlaceModels;
 import java.io.Serializable;
 
 public class NearbyPlace extends ReverseGeoPlace implements Serializable {
-    protected String  longitude,latitude,type,subType,phoneNumber;;
+    protected String type,subType,phoneNumber;;
     public NearbyPlace(){}
-    public NearbyPlace(String id, double distance_within_meters, String longitude, String latitude, String address, String city, String area, String type, String subType, String code,String phoneNumber){
+    public NearbyPlace(String id, double distance_within_meters, double longitude, double latitude, String address, String city, String area, String type, String subType, String code,String phoneNumber){
         this.id=id;
         this.distance_within_meters=distance_within_meters;
         this.longitude=longitude;
@@ -18,19 +18,19 @@ public class NearbyPlace extends ReverseGeoPlace implements Serializable {
         this.code=code;
         this.phoneNumber=phoneNumber;
     }
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 

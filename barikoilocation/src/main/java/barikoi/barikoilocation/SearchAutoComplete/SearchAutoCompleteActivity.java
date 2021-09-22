@@ -70,7 +70,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         init();
         progressBar=findViewById(R.id.progressBarSearchPlace);
         progressBar.setVisibility(View.GONE);
-        locationChecked = findViewById(R.id.locationChecked);
+        //locationChecked = findViewById(R.id.locationChecked);
 
 
         editTextSearchAutoComplete.setOnTouchListener(new View.OnTouchListener() {
@@ -104,17 +104,17 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 listView.emptyshow(false);
                 editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
-                progressBar.setVisibility(View.VISIBLE);
+
                 if(charSequence.length()>=2){
 
-                    if (locationChecked.isChecked()) {
+                    /*if (locationChecked.isChecked()) {
                         GetLocationTask getLoc = new GetLocationTask(SearchAutoCompleteActivity.this);
                         if (getLoc.getIsGPSTrackingEnabled()){
                             latitude= getLoc.getLatitude();
                             longitude = getLoc.getLongitude();
                         }
                         getLoc.displayLocation();
-                    }
+                    }*/
                     queue.cancelAll("search");
                     mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
                     editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back,0,0,0);
@@ -165,7 +165,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         placeAdapter=new PlaceSearchAdapter(items, new PlaceSearchAdapter.OnPlaceItemSelectListener() {
             @Override
             public void onPlaceSelected(SearchAutoCompletePlace mItem, int position) {
-                GeoCodeAPI.builder(getApplicationContext())
+                /*GeoCodeAPI.builder(getApplicationContext())
                         .idOrCode(mItem.getId())
                         .build()
                         .generateList(new PlaceGeoCodeListener() {
@@ -180,7 +180,11 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                             public void onFailure(String message) {
                                 Log.d(TAG, message);
                             }
-                        });
+                        });*/
+                Intent returnIntent = getIntent();
+                returnIntent.putExtra("place_selected",mItem);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
             }
 
         });
@@ -197,75 +201,42 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                 items.clear();
                 placeAdapter.notifyDataSetChanged();
                 queue.cancelAll("search");
-                if (locationChecked.isChecked()) {
-                    Log.d(TAG, "ischecked");
-                    SearchAutoCompleteAPI.builder(getApplicationContext())
-                            .nameOrCode(enteredText)
-                            .setLatLng(latitude, longitude)
-                            .build()
-                            .generateList(new SearchAutoCompleteListener() {
-                                @Override
-                                public void onPlaceListReceived(ArrayList<SearchAutoCompletePlace> places) {
-                                    if (places.size() > 0) {
-                                        progressBar.setVisibility(View.GONE);
-                                        items.addAll(places);
-                                        placeAdapter.notifyDataSetChanged();
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                    } else {
-                                        listView.emptyshow(true);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                    }
+                progressBar.setVisibility(View.VISIBLE);
+                Log.d(TAG, "else ischecked");
+                SearchAutoCompleteAPI.builder(getApplicationContext())
+                        .nameOrCode(enteredText)
+                        .build()
+                        .generateList(new SearchAutoCompleteListener() {
+                            @Override
+                            public void onPlaceListReceived(ArrayList<SearchAutoCompletePlace> places) {
+                                if (places.size() > 0) {
+                                    progressBar.setVisibility(View.GONE);
+                                    items.addAll(places);
+                                    placeAdapter.notifyDataSetChanged();
+                                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+                                } else {
+                                    listView.emptyshow(true);
+                                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(String message) {
-                                    if (message.equals(JSONErrorMessage)) {
-                                        progressBar.setVisibility(View.GONE);
-                                        listView.emptyshow(true);
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                        //listView.nonetshow(true);
-                                        listView.emptyshow(true);
-                                    }
+                            @Override
+                            public void onFailure(String message) {
+                                if (message.equals(JSONErrorMessage)) {
+                                    progressBar.setVisibility(View.GONE);
+                                    listView.emptyshow(true);
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+                                    editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
+                                    //listView.nonetshow(true);
+                                    listView.emptyshow(true);
                                 }
-                            });
-                }else {
-                    Log.d(TAG, "else ischecked");
-                    SearchAutoCompleteAPI.builder(getApplicationContext())
-                            .nameOrCode(enteredText)
-                            .build()
-                            .generateList(new SearchAutoCompleteListener() {
-                                @Override
-                                public void onPlaceListReceived(ArrayList<SearchAutoCompletePlace> places) {
-                                    if (places.size() > 0) {
-                                        progressBar.setVisibility(View.GONE);
-                                        items.addAll(places);
-                                        placeAdapter.notifyDataSetChanged();
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                    } else {
-                                        listView.emptyshow(true);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(String message) {
-                                    if (message.equals(JSONErrorMessage)) {
-                                        progressBar.setVisibility(View.GONE);
-                                        listView.emptyshow(true);
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        editTextSearchAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_back, 0, R.drawable.ic_close, 0);
-                                        //listView.nonetshow(true);
-                                        listView.emptyshow(true);
-                                    }
-                                }
-                            });
+                            }
+                        });
                 }
 
             }
-        }
+
     };
 
 

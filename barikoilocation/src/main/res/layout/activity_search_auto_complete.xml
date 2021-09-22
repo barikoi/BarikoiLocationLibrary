@@ -34,7 +34,6 @@
                 android:ellipsize="end"
                 android:focusable="true"
                 android:gravity="center|fill"
-                android:hint="@string/address"
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:padding="12dp"
@@ -55,14 +54,14 @@
 
         </RelativeLayout>
 
-        <CheckBox
+        <!--<CheckBox
             android:id="@+id/locationChecked"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginRight="8dp">
 
-        </CheckBox>
+        </CheckBox>-->
 
 
     </LinearLayout>
