@@ -6,4 +6,5 @@
     <color name="colorLightGray">#a6aba5</color>
     <color name="colorBarikoi">#2db654</color>
     <color name="colorTextGray">#606060</color>
+    <color name="defaultGray">#808080</color>
 </resources>

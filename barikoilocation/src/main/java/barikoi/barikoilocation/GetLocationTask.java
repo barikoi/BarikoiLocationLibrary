@@ -10,10 +10,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import barikoi.barikoilocation.SearchAutoComplete.SearchAutoCompleteActivity;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -52,7 +52,9 @@ public class GetLocationTask {
 		builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new  DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
 				mContext.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+				isGPSTrackingEnabled = true;
 			}
 		}).setNegativeButton("No", new DialogInterface.OnClickListener() {
 			@Override
@@ -64,7 +66,10 @@ public class GetLocationTask {
 		alertDialog.show();
 	}
 
+
+
 	public void getLocation() {
+		Log.d(TAG, "getLocation");
 		if (ActivityCompat.checkSelfPermission(
 				mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
 				mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
