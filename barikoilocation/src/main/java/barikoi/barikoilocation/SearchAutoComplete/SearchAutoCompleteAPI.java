@@ -29,16 +29,20 @@ public class SearchAutoCompleteAPI {
     String nameOrCode, params;
     private Double latitude;
     private Double longitude;
+    private String city;
+    private boolean bangla;
     /**
      * This constructor sets the context of application and a SearchAutoComplete listener
      * @param context is the application context
 
      */
-    private SearchAutoCompleteAPI(Context context,String nameOrCode, Double latitude,Double longitude){
+    private SearchAutoCompleteAPI(Context context,String nameOrCode, Double latitude,Double longitude, String city, boolean bangla){
         this.context=context;
         this.nameOrCode=nameOrCode;
         this.latitude=latitude;
         this.longitude=longitude;
+        this.city= city;
+        this.bangla = bangla;
     }
     /**
      * This method builds the Builder of this class
@@ -49,6 +53,7 @@ public class SearchAutoCompleteAPI {
         return new Builder(context);
     }
 
+
     /**
      *  requests the server to get info about the given place name
      */
@@ -58,6 +63,8 @@ public class SearchAutoCompleteAPI {
         }else {
             params = "?q="+this.nameOrCode;
         }
+        if(bangla) params= params+"&bangla=true";
+        if(city.length()>0) params= params+"&city="+city;
         RequestQueue queue= RequestQueueSingleton.getInstance(this.context).getRequestQueue();
         queue.cancelAll("search");
         Log.d("SearchAC", "LATLNG: " +this.latitude+ ", " +this.longitude);
@@ -108,6 +115,8 @@ public class SearchAutoCompleteAPI {
         private String nameOrCode="";
         private Double latitude=0.0;
         private Double longitude=0.0;
+        private String city="";
+        private boolean bangla= false;
 
         /**
          * Private constructor for initializing the raw SearchAutoComplete.Builder
@@ -129,6 +138,14 @@ public class SearchAutoCompleteAPI {
             this.longitude=longitude;
             return this;
         }
+        public Builder setBangla( boolean bangla){
+            if(bangla) this.bangla=bangla;
+            return this;
+        }
+        public Builder setCity(String city){
+            if(city!=null) this.city= city;
+            return this;
+        }
         /**
          * This uses the provided parameters set using the {@link Builder} and adds the required
          * settings for search Autocomplete to work correctly.
@@ -136,7 +153,7 @@ public class SearchAutoCompleteAPI {
          * @return a new instance of Search Autocomplete
          */
         public SearchAutoCompleteAPI build(){
-            SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this.context,this.nameOrCode, this.latitude,this.longitude);
+            SearchAutoCompleteAPI searchAutoCompleteAPI=new SearchAutoCompleteAPI(this.context,this.nameOrCode, this.latitude,this.longitude, this.city, this.bangla);
             return searchAutoCompleteAPI;
         }
     }

@@ -52,9 +52,8 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
     private PlaceSearchAdapter placeAdapter;
     private EditText editTextSearchAutoComplete;
     private ProgressBar progressBar;
-    private String suggestText;
-    private TextView textV;
-    private CheckBox locationChecked;
+    private String city="";
+    private boolean bangla=false;
     private final static String JSONErrorMessage="not found";
     private final static String TAG="SearchACActivity";
     private static final int AUTOCOMPLETE_DELAY = 300;
@@ -154,7 +153,9 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
      * Initializes the views needed in this activity
      */
     private void init(){
-        queue= RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
+        bangla = getIntent().getBooleanExtra("bangla",false);
+        city = getIntent().getStringExtra("city");
+        queue = RequestQueueSingleton.getInstance(getApplicationContext()).getRequestQueue();
         editTextSearchAutoComplete =findViewById(R.id.barikoiEditText);
         items=new ArrayList<SearchAutoCompletePlace>();
         listView= findViewById(R.id.searchedplacelist);
@@ -162,7 +163,7 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
         View noNetList=findViewById(R.id.LinearLayoutNoNetContainer);
         listView.setNonetview(noNetList);
         listView.setEmptyView(emptyList);
-        placeAdapter=new PlaceSearchAdapter(items, new PlaceSearchAdapter.OnPlaceItemSelectListener() {
+        placeAdapter=new PlaceSearchAdapter(items,bangla, new PlaceSearchAdapter.OnPlaceItemSelectListener() {
             @Override
             public void onPlaceSelected(SearchAutoCompletePlace mItem, int position) {
                 /*GeoCodeAPI.builder(getApplicationContext())
@@ -181,9 +182,10 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                                 Log.d(TAG, message);
                             }
                         });*/
+                Log.d("selected place", mItem.getAddress());
                 Intent returnIntent = getIntent();
                 returnIntent.putExtra("place_selected",mItem);
-                setResult(Activity.RESULT_OK,returnIntent);
+                setResult(555,returnIntent);
                 finish();
             }
 
@@ -205,6 +207,8 @@ public class SearchAutoCompleteActivity extends AppCompatActivity {
                 Log.d(TAG, "else ischecked");
                 SearchAutoCompleteAPI.builder(getApplicationContext())
                         .nameOrCode(enteredText)
+                        .setBangla(bangla)
+                        .setCity(city)
                         .build()
                         .generateList(new SearchAutoCompleteListener() {
                             @Override

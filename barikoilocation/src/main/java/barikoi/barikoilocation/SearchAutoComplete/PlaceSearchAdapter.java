@@ -21,10 +21,12 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     private ArrayList<SearchAutoCompletePlace> places;
     ///private Context context;
     private OnPlaceItemSelectListener opsl;
+    private boolean bangla=false;
     //private ArrayList<Place> placeListFiltered;
 
-    public PlaceSearchAdapter(ArrayList<SearchAutoCompletePlace> places, OnPlaceItemSelectListener opsl){
+    public PlaceSearchAdapter(ArrayList<SearchAutoCompletePlace> places, boolean bangla, OnPlaceItemSelectListener opsl){
         this.places=places;
+        this.bangla=bangla;
         //this.placeListFiltered=places;
         this.opsl=opsl;
     }
@@ -40,8 +42,8 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = places.get(position);
 
-        holder.placeView.setText(holder.mItem.getAddress());
-        holder.areatag.setText(holder.mItem.getArea());
+        holder.placeView.setText(bangla?holder.mItem.getAddressBn():  holder.mItem.getAddress());
+        holder.areatag.setText(bangla? holder.mItem.getAreaBn():holder.mItem.getArea());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

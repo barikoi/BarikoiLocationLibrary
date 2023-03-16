@@ -24,6 +24,7 @@ public class RupantorAPI {
     private Context context;
     private String rawAddress;
 
+
     /**
      * This constructor sets the context of application and a PlaceGeoCodeAPI listener
      */

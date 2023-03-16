@@ -1,6 +1,8 @@
 package barikoi.barikoilocation.library;
 
 
+import static barikoi.barikoilocation.PlaceModels.ReverseGeoParams.*;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import barikoi.barikoilocation.NearbyPlace.NearbyPlaceAPI;
 import barikoi.barikoilocation.NearbyPlace.NearbyPlaceListener;
 import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
 import barikoi.barikoilocation.PlaceModels.NearbyPlace;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoParams;
 import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
 import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.ReverseGeo.ReverseGeoAPI;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         rupantorquery=findViewById(R.id.rupantor_query);
         rupantorSearch=findViewById(R.id.rupantor_search);
         searchAutocompleteFragment =(SearchAutocompleteFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        searchAutocompleteFragment.setBangla(true);
         searchAutocompleteFragment.setPlaceSelectionListener(new SearchAutocompleteFragment.PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(SearchAutoCompletePlace place) {
@@ -62,12 +66,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ReverseGeoAPI.builder(getApplicationContext())
                         .setLatLng(Double.parseDouble(lat.getText().toString()),Double.parseDouble(lon.getText().toString()))
+                        .setAdditionalParams(new ReverseGeoParams[]{DISTRICT, ADDRESS_COMPONENTS})
                         .build()
                         .getAddress(new ReverseGeoAPIListener() {
 
                             @Override
                             public void reversedAddress(ReverseGeoPlace place) {
-                                Toast.makeText(MainActivity.this, ""+place.getAddress(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, ""+place.getAddress()+ " "+place.getAddressComponents().getHouse()+" "+place.getDistrict(), Toast.LENGTH_SHORT).show();
                                 Log.d("ReverseGeoPlace",""+place.getAddress());
                             }
 

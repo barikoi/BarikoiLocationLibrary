@@ -16,8 +16,12 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import barikoi.barikoilocation.Api;
 import barikoi.barikoilocation.JsonUtils;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoParams;
 import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
 import barikoi.barikoilocation.RequestQueueSingleton;
 
@@ -30,6 +34,7 @@ public class ReverseGeoAPI {
     private Context context;
     private Double latitude;
     private Double longitude;
+    private ReverseGeoParams[] additionalParams = {};
 
     /**
      * Build a new object with the proper navigation parameters already setup.
@@ -38,10 +43,11 @@ public class ReverseGeoAPI {
      * @since 0.5.0
      */
 
-    private ReverseGeoAPI(Context context, Double latitude, Double longitude){
+    private ReverseGeoAPI(Context context, Double latitude, Double longitude, ReverseGeoParams[] params ){
         this.context=context;
         this.latitude=latitude;
         this.longitude=longitude;
+        this.additionalParams=params;
     }
 
     /**
@@ -58,7 +64,7 @@ public class ReverseGeoAPI {
     public void getAddress(ReverseGeoAPIListener reverseGeoAPIListener){
         RequestQueue queue = RequestQueueSingleton.getInstance(this.context.getApplicationContext()).getRequestQueue();
         StringRequest request = new StringRequest(Request.Method.GET,
-                Api.reverseString +"?latitude="+this.latitude+"&longitude="+this.longitude,
+                Api.reverseString +"?latitude="+this.latitude+"&longitude="+this.longitude + JsonUtils.getParamString(additionalParams),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -112,6 +118,7 @@ public class ReverseGeoAPI {
        Context context;
        Double latitude=0.0;
        Double longitude=0.0;
+       private ReverseGeoParams[] additionalParams= {};
 
        /**
         * Private constructor for initializing the raw ReverseGeo.Builder
@@ -130,6 +137,11 @@ public class ReverseGeoAPI {
            this.longitude=longitude;
            return this;
        }
+
+       public Builder setAdditionalParams(ReverseGeoParams[] params){
+           this.additionalParams=params;
+           return this;
+       }
         /**
          * This uses the provided parameters set using the {@link Builder} and adds the required
          * settings for ReverseGeo to work correctly.
@@ -137,7 +149,7 @@ public class ReverseGeoAPI {
          * @return a new instance of ReverseGeo
          */
        public ReverseGeoAPI build(){
-           ReverseGeoAPI reverseGeoAPI=new ReverseGeoAPI(this.context,this.latitude,this.longitude);
+           ReverseGeoAPI reverseGeoAPI=new ReverseGeoAPI(this.context,this.latitude,this.longitude, this.additionalParams);
            return reverseGeoAPI;
        }
    }

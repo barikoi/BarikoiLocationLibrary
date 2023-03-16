@@ -3,7 +3,7 @@ package barikoi.barikoilocation.PlaceModels;
 import java.io.Serializable;
 
 public class SearchAutoCompletePlace implements Serializable {
-    protected String id, address,code,area;
+    protected String id, address,code,area,addressBn, areaBn, cityBn;
     protected double longitude, latitude;
 
     public SearchAutoCompletePlace(){}
@@ -22,6 +22,30 @@ public class SearchAutoCompletePlace implements Serializable {
         this.area=area;
         this.longitude=longitude;
         this.latitude=latitude;
+    }
+
+    public String getAddressBn() {
+        return addressBn;
+    }
+
+    public void setAddressBn(String addressBn) {
+        this.addressBn = addressBn;
+    }
+
+    public String getAreaBn() {
+        return areaBn;
+    }
+
+    public void setAreaBn(String areaBn) {
+        this.areaBn = areaBn;
+    }
+
+    public String getCityBn() {
+        return cityBn;
+    }
+
+    public void setCityBn(String cityBn) {
+        this.cityBn = cityBn;
     }
 
     public void setId(String id){

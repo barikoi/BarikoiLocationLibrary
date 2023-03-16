@@ -18,7 +18,10 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import barikoi.barikoilocation.PlaceModels.AddressComponents;
+import barikoi.barikoilocation.PlaceModels.AreaComponents;
 import barikoi.barikoilocation.PlaceModels.NearbyPlace;
+import barikoi.barikoilocation.PlaceModels.ReverseGeoParams;
 import barikoi.barikoilocation.PlaceModels.SearchAutoCompletePlace;
 import barikoi.barikoilocation.PlaceModels.GeoCodePlace;
 import barikoi.barikoilocation.PlaceModels.ReverseGeoPlace;
@@ -79,9 +82,15 @@ public final class JsonUtils {
                 String area=report.has("area")? report.getString("area"):"";
                 double lon = Double.parseDouble(report.has("longitude")? report.getString("longitude"):"");
                 double lat = Double.parseDouble(report.has("latitude")?report.getString("latitude"):"");
-
                 SearchAutoCompletePlace newplace = new SearchAutoCompletePlace(id,address, code, area,lon,lat);
+                String addressBn= report.has("address_bn")? report.getString("address_bn"):"";
+                String areaBn = report.has("area_bn")? report.getString("area_bn"):"";
+                String cityBn = report.has("city_bn")? report.getString("city_bn"):"";
+                newplace.setAddressBn(addressBn);
+                newplace.setAreaBn(areaBn);
+                newplace.setCityBn(cityBn);
                 newplaces.add(newplace);
+
             }
         }catch (Exception e){
             Log.d("JsonUtils",e.getLocalizedMessage());
@@ -134,6 +143,7 @@ public final class JsonUtils {
      */
     public static ReverseGeoPlace getReverseGeoPlace(JSONObject jsonObject){
         try{
+            Log.d("response", jsonObject.toString());
             double distance_within_meters = jsonObject.has("distance_within_meters")?jsonObject.getDouble("distance_within_meters"):0.0;
             String id = jsonObject.has("id")?jsonObject.getString("id"):"";
             String address =jsonObject.has("address")? jsonObject.getString("address"):"";
@@ -141,7 +151,24 @@ public final class JsonUtils {
             String city=jsonObject.has("city")? jsonObject.getString("city"):"";
 
             ReverseGeoPlace newplace = new ReverseGeoPlace(id,address, area, city, distance_within_meters);
+            newplace.setAddressBN(jsonObject.has("address_bn")?jsonObject.getString("address_bn"):"");
+            newplace.setAreaBN(jsonObject.has("area_bn")?jsonObject.getString("area_bn"):"");
+            newplace.setCityBN(jsonObject.has("city_bn")?jsonObject.getString("city_bn"):"");
+            newplace.setCountry(jsonObject.has("country")?jsonObject.getString("country"):"");
+            newplace.setDivision(jsonObject.has("division")?jsonObject.getString("division"):"");
+            newplace.setSubDistrict(jsonObject.has("sub_district")?jsonObject.getString("sub_district"):"");
+            newplace.setDistrict(jsonObject.has("district")?jsonObject.getString("district"):"");
+            newplace.setUnion(jsonObject.has("union")?jsonObject.getString("union"):"");
+            newplace.setPauroshova(jsonObject.has("pauroshova")?jsonObject.getString("pauroshova"):"");
+            if(jsonObject.has("address_components")){
+                JSONObject jsonObject1= jsonObject.getJSONObject("address_components");
+                newplace.setAddressComponents(new AddressComponents(jsonObject1.has("place_name")?jsonObject1.getString("place_name"):"",jsonObject1.has("house")?jsonObject1.getString("house"):"",jsonObject1.has("road")?jsonObject1.getString("road"):""));
+            }
 
+            if(jsonObject.has("area_components")){
+                JSONObject jsonObject2= jsonObject.getJSONObject("area_components");
+                newplace.setAreaComponents(new AreaComponents(jsonObject2.has("area")?jsonObject2.getString("area"):"",jsonObject2.has("sub_area")?jsonObject2.getString("sub_area"):""));
+            }
             Log.d("JsonUtils",""+newplace.getAddress());
             return newplace;
 
@@ -169,6 +196,15 @@ public final class JsonUtils {
         else{
            return "Unknown Error Occured";
         }
+    }
+
+
+    public static String getParamString(ReverseGeoParams[] params){
+        String paramstring="";
+        for(ReverseGeoParams p :params){
+            paramstring= paramstring+"&"+p.toString()+"=true";
+        }
+        return paramstring;
     }
 
     /**
