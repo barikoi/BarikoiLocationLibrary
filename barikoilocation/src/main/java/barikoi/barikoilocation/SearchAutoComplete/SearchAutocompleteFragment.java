@@ -84,7 +84,7 @@ public class SearchAutocompleteFragment extends Fragment {
                         }
                     }
                 });
-        barikoiEditText.setOnTouchListener(new View.OnTouchListener() {
+        /*barikoiEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
@@ -93,6 +93,17 @@ public class SearchAutocompleteFragment extends Fragment {
 //                startActivityForResult(intent,requestCode);
                 startSearch.launch(intent);
                 return true;
+            }
+        });*/
+        barikoiEditText.setFocusable(false);
+        barikoiEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),SearchAutoCompleteActivity.class);
+                if(city.length()>0) intent.putExtra("city", city);
+                if(bangla) intent.putExtra("bangla", bangla);
+//                startActivityForResult(intent,requestCode);
+                startSearch.launch(intent);
             }
         });
     }
